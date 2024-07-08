@@ -55,3 +55,23 @@ pnpm dev
 ```
 
 You should be all set!
+
+# Blockchain
+
+1\. If you haven't already, install Foundry: <https://book.getfoundry.sh/getting-started/installation>.
+
+2. In a new shell, run Anvil:
+
+```sh
+anvil
+```
+
+3. In a separate shell, deploy the smart contract (currently using the default Counter contract made by `forge init`):
+
+```sh
+forge create Counter --interactive
+```
+
+When asked for a private key, copy and paste one from the shell running Anvil.
+
+You should be all set!
