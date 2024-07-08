@@ -9,6 +9,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.10"
 flask = "^3.0.3"
+web3 = "^6.20.0"
 
 [build-system]
 requires = ["poetry-core"]
