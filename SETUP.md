@@ -43,6 +43,13 @@ You should be all set!
 corepack enable
 ```
 
+Alternatively, you can install pnpm with:
+
+```sh
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+source ~/.bashrc
+```
+
 3\. Install the frontend's dependencies:
 ```sh
 cd frontend
