@@ -1,4 +1,5 @@
 from flask import Flask, request
+import flask
 
 app = Flask(__name__)
 
@@ -25,7 +26,9 @@ def packages_sample():
       "1.0.0"
     ]
   }
-  return [sample_package_1, sample_package_2], 200
+  response = flask.jsonify([sample_package_1, sample_package_2])
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  return response, 200
 
 @app.route("/publish_package_sample", methods=['POST'])
 def publish_package_sample():
