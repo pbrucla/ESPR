@@ -43,9 +43,10 @@ export default function Home(){
     },[]);
     const toRender = pack.map((content) => 
         <div className={styles.packitem}>
-            <h2><a href={"/packages/" + content.name} className={styles.a}>{content.name}</a></h2>
+            <span><h2 className={styles.h2inline}><a href={"/packages/" + content.name} className={styles.a}>{content.name}</a></h2>
+            <p className={styles.pinline}>{content.version_history[content.version_history.length-1]}</p></span>
             <p>{content.description}</p>
-            <p>{content.version_history[content.version_history.length-1]}</p>
+            
         </div>
     );
     return (

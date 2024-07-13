@@ -253,3 +253,12 @@
 .a:hover{
   text-decoration: underline;
 }
+
+.h2inline{
+  display: inline-block;
+}
+
+.pinline{
+  display:inline-block;
+  float:right;
+}
