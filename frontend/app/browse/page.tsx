@@ -42,19 +42,21 @@ export default function Home(){
         getPacks();
     },[]);
     const toRender = pack.map((content) => 
-        <div>
-            <h2><Link href={"/packages/" + content.name}>{content.name}</Link></h2>
+        <div className={styles.packitem}>
+            <h2><a href={"/packages/" + content.name} className={styles.a}>{content.name}</a></h2>
             <p>{content.description}</p>
             <p>{content.version_history[content.version_history.length-1]}</p>
         </div>
     );
     return (
-        <main className={styles.main}>
-            <div className={styles.center}>
-                <h1>Browse For Packages</h1>
-            </div>
+        <main>
             <div>
-                {toRender}
+                <div className={styles.title}>
+                    <h1 >Browse For Packages</h1>
+                </div>
+                <div>
+                    {toRender}
+                </div>
             </div>
         </main>
     );
