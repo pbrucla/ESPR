@@ -261,3 +261,34 @@
 .pinline{
   float:right;
 }
+
+.topnav {
+  background-color: #000;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #ffba44;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ff8c4c;
+  color: black;
+}
+
+.topnav a.split {
+  float: right;
+  background-color: #ffda1a;
+  color: black;
+}
+
+.topnav a.split:hover {
+  background-color: #F44D8A;
+}
