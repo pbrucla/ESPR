@@ -41,7 +41,7 @@ contract Package {
     }
 
     modifier enabled() {
-        require(enabled, “Contract Disabled");
+        require(enabled, "Contract Disabled");
 	  _;
     }
     
