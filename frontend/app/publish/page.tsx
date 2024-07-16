@@ -9,16 +9,31 @@ export default function Home(){
     const [vers, setVers] = React.useState('');
     const [priv, setPriv] = React.useState('');
     const [pub, setPub] = React.useState('');
+    const [desc, setDesc] = React.useState('');
     
-    const submitting = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitting = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        try {
+            const response = await fetch(`${back_url}/publish_package_sample`, {
+                method:"POST",
+                body: JSON.stringify({
+                    name: name,
+                    initial_version: vers,
+                    description: desc
+                })
+            })
+        } catch (error){
+            if (error instanceof Error){
+                console.error(error.message);
+            }
+        }
     }
     return (
         <main>
             <div className={styles.title}>
                 <h1>Publish a Package!</h1>
             </div>
-            <div className={styles.center}>
+            <div >
                 <form onSubmit={submitting}>
                     <div>
                         <div>
@@ -48,6 +63,15 @@ export default function Home(){
                                 type="text"
                                 value={priv}
                                 onChange={(e) => setPriv(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <h3>Package Description</h3>
+                            <input
+                                id="desc"
+                                type="text"
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
                             />
                         </div>
                     </div>
