@@ -62,10 +62,6 @@ contract Package {
     }
 
     modifier enabled() {
-<<<<<<< HEAD
-        require(enabled, "Contract Disabled");
-	  _;
-=======
         require(packageEnabled, "Package Disabled");
 	    _;
     }
@@ -98,7 +94,6 @@ contract Package {
             dependencyMap[version_name].push(dependencyList[i]);
         }
         emit packageVersionUpdate(tx.origin, name, version_name, dependencyList); 
->>>>>>> 37b95f7 (version history and event emission)
     }
     
 
