@@ -22,7 +22,6 @@ export default function RootLayout({
           <a href='/'>Working Title</a>
           <a href='/browse'>Browse</a>
           <a href='/publish'>Publish</a>
-          <a href='/login' className={styles.split}>Login</a>
         </div>
         <main>
           {children}

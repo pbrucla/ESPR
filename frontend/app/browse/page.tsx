@@ -8,21 +8,6 @@ const back_url = "http://127.0.0.1:5000";
 
 export default function Home(){
     const [pack, setPack] = React.useState<any[]>([]);
-    // async function getPacks(){
-    //     try {
-    //         const response = await fetch(`${back_url}/packages_sample`);
-    //         if (!response.ok){
-    //             throw new Error(`Response status: ${response.status}`);
-    //         }
-    //         const json = await response.json();
-    //         console.log(json[0]);
-    //         return json;
-    //     } catch (error){
-    //         if (error instanceof Error){
-    //             console.error(error.message);
-    //         }
-    //     }
-    // }
     React.useEffect(() => {
         const getPacks = async () => {
             try {
