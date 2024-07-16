@@ -1,7 +1,10 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import flask
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/")
 def hello_world():
@@ -31,9 +34,10 @@ def packages_sample():
   return response, 200
 
 @app.route("/publish_package_sample", methods=['POST'])
+@cross_origin()
 def publish_package_sample():
   name = request.form['name']
   initial_version = request.form['initial_version']
   description = request.form['description']
-
-  return {"name": name, "initial_version": initial_version, "description": description}, 201
+  response = flask.jsonify({"name": name, "initial_version": initial_version, "description": description})
+  return response, 201
