@@ -25,7 +25,7 @@ contract Package {
     address[] public collaborators;
     bool public packageEnabled;
 
-    constructor(address _author, string memory _name, string[] dependencyList) {
+    constructor(address _author, string memory _name, string[] memory dependencyList) {
         author = _author;
         name = _name;
         current_version[0] = 1; 
@@ -41,7 +41,7 @@ contract Package {
     }
 
     modifier enabled() {
-        require(enabled, "Contract Disabled");
+        require(packageEnabled, "Contract Disabled");
 	  _;
     }
     
@@ -59,6 +59,6 @@ contract Package {
         return versions;
     }
     function disable() public only_author {
-       enabled = false;
+       packageEnabled = false;
     }
 }

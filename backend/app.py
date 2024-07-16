@@ -1,6 +1,11 @@
+from solcx import install_solc, set_solc_version,compile_standard
+from dotenv import load_dotenv#here install solidity version
+install_solc('v0.8.2')
+set_solc_version('v0.8.2')
 from flask import Flask, request
 from web3 import Web3
-
+import json
+import os
 
 app = Flask(__name__)
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
@@ -9,67 +14,84 @@ print(w3.is_connected())
 private_key = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 account_0 = w3.eth.account.from_key(private_key)
 some_address = "0x0000000000000000000000000000000000000000"
-init_bytecode= "6080604052348015600e575f80fd5b506101d98061001c5f395ff3fe608060405234801561000f575f80fd5b506004361061004a575f3560e01c806306661abd1461004e578063371303c01461006c5780636d4ce63c14610076578063b3bcfa8214610094575b5f80fd5b61005661009e565b60405161006391906100f7565b60405180910390f35b6100746100a3565b005b61007e6100bd565b60405161008b91906100f7565b60405180910390f35b61009c6100c5565b005b5f5481565b60015f808282546100b4919061013d565b92505081905550565b5f8054905090565b60015f808282546100d69190610170565b92505081905550565b5f819050919050565b6100f1816100df565b82525050565b5f60208201905061010a5f8301846100e8565b92915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f610147826100df565b9150610152836100df565b925082820190508082111561016a57610169610110565b5b92915050565b5f61017a826100df565b9150610185836100df565b925082820390508181111561019d5761019c610110565b5b9291505056fea2646970667358221220148b13669b62948cb60a748f18e464be2b0ad0f3b2f94f2dc2dce661e9fe6cd064736f6c634300081a0033"
-abi = [
-	{
-		"inputs": [],
-		"name": "count",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "dec",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "get",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "inc",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-]
 
-Counter = w3.eth.contract(bytecode=init_bytecode, abi=abi)
-tx_hash = Counter.constructor().transact({"from": account_0.address})
+file_path = os.path.abspath("../blockchain/src")
+name = "packageContract.sol"
+input = {
+    'language': 'Solidity',
+    'sources': {
+        name: {'urls': [file_path + "/" + name]}},
+    'settings': {
+        'outputSelection': {
+            '*': {
+                '*': ["abi", "metadata", "evm.bytecode", "evm.bytecode.sourceMap"],
+            },
+            'def': {name: ["abi", "evm.bytecode.opcodes"]},
+        }
+    }
+}
+
+output = compile_standard(input, allow_paths=file_path)
+
+contracts = output["contracts"]
+
+with open('compiled_code.json', "w") as file:
+    json.dump(output, file)
+
+init_bytecode = contracts["packageContract.sol"]["PackageManager"]["evm"]["bytecode"]["object"]
+
+abi = contracts["packageContract.sol"]["PackageManager"]["abi"]
+
+
+Package_Contract = w3.eth.contract(bytecode=init_bytecode, abi=abi)
+tx_hash = Package_Contract.constructor().transact({"from": account_0.address})
 receipt = w3.eth.get_transaction_receipt(tx_hash)
 deployed_addr = receipt["contractAddress"]
 
 @app.route("/")
 def hello_world():
-  counter = w3.eth.contract(address=deployed_addr, abi=abi)
-  unsent_billboard_tx = counter.functions.inc().build_transaction({
-    "from": account_0.address,
-    "nonce": w3.eth.get_transaction_count(account_0.address),
-  })
-  signed_tx = w3.eth.account.sign_transaction(unsent_billboard_tx, private_key=account_0.key)
-  tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-  w3.eth.wait_for_transaction_receipt(tx_hash)
-  counter_value = counter.functions.get().call()
-  return f"<p>Hello, World. Counter var: {counter_value}</p>"
+	# Example data
+	packageName = 'examplePackage'
+	dependencies = ['dep1', 'dep2', 'dep3']
+
+	# Assuming w3 is your Web3 instance
+	# Assuming deployed_addr and abi are defined elsewhere
+	package_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+
+	# Build the transaction
+	unsent_billboard_tx = package_contract.functions.create_package(packageName, dependencies).build_transaction({
+		"from": account_0.address,
+		"nonce": w3.eth.get_transaction_count(account_0.address),
+	})
+
+	# Sign the transaction
+	signed_tx = w3.eth.account.sign_transaction(unsent_billboard_tx, private_key=account_0.key)
+
+	# Send the transaction
+	tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+	print(f"Transaction sent with hash: {tx_hash.hex()}")
+
+	# Wait for the transaction receipt with a longer timeout
+	try:
+		receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
+		print(f"Transaction mined in block {receipt['blockNumber']}")
+	except Exception as e:
+		print(f"Error waiting for transaction receipt: {str(e)}")
+		raise
+
+	# Check if the transaction was successful
+	if receipt.status != 1:
+		print("Transaction failed")
+	# else:
+		# Fetch the package name from the contract
+		# try:
+		# 	#package_name = package_contract.functions.packages(0).name.call()
+		# 	#print(f"Package name: {package_name}")
+		# except Exception as e:
+		# 	#print(f"Error calling contract function: {str(e)}")
+		# 	raise
+
+	return f"<p>Hello, World. package name var: </p>"
 
 @app.route("/packages_sample", methods=['GET'])
 def packages_sample():
