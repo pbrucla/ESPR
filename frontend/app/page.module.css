@@ -292,3 +292,14 @@
 .topnav a.split:hover {
   background-color: #F44D8A;
 }
+
+.basiccenter {
+  margin: auto;
+  padding: 1rem;
+}
+
+.centertext {
+  position: relative;
+  display: block;
+  margin: auto;
+}
