@@ -102,6 +102,10 @@ contract Package {
         emit collaboratorAdded(tx.origin, collab_user, name);
     }
 
+    function get_collaborators() public enabled view returns (address[] memory) {
+        return collaborators;
+    }
+
     function get_name() public enabled view returns (string memory) {
         return name;
     }
@@ -109,6 +113,11 @@ contract Package {
     function get_versions() public enabled view returns (string[] memory)
     {
         return versions;
+    }
+
+    function get_dependencies(string calldata version_number) public enabled view returns (string[] memory) 
+    {
+        return dependencyMap[version_number];
     }
 
     function disable() public only_author {
