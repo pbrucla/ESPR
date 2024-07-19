@@ -3,12 +3,32 @@ import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className = {styles.topnav}>
-        
-        <a href="." className = {styles.active}> home </a>
-        <a href="/browse/page.tsx"> browse </a>
-        <a href="/packages/page.tsx"> packages </a>
-        <input type="text" placeholder="Search.." />
+    <main>
+      <div className={styles.paragraphBox}>
+        <div>
+        <h1>PACKAGES ARE BLOCKS AND THEREFORE PACKAGES SHOULD GO ON THE BLOCKCHAIN</h1>
+        <p>
+          put your package on the blockchain now
+        </p>
+       
+        <a  href="/login/page.tsx">
+        <button className = {styles.homepageButton}>
+          Get started
+        </button>
+        </a>
+        </div>
       </div>
+      
+      <div className={styles.paragraphBox}>
+        <div>
+        <h1>NOT INTERESTED IN GETTING STARTED?</h1>
+        <a  href="/packages/page.tsx">
+        <button className = {styles.homepageButton}>
+          CLICK IF PRO
+        </button>
+        </a>
+        </div>
+      </div>
+    </main>
   );
 }

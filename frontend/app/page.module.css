@@ -229,16 +229,48 @@
   }
 }
 
-/* Add a black background color to the top navigation */
+.title {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.packitem {
+  border: 2px solid lightgrey;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  padding: 2rem;
+}
+
+.a {
+  color: skyblue;
+}
+
+.a:visited {
+  color: mediumpurple;
+}
+
+.a:hover{
+  text-decoration: underline;
+}
+
+.h2inline{
+  display: inline-block;
+}
+
+.pinline{
+  float:right;
+}
+
 .topnav {
-  background-color: #333;
+  background-color: #000;
   overflow: hidden;
 }
 
 /* Style the links inside the navigation bar */
 .topnav a {
   float: left;
-  color: #f2f2f2;
+  color: #ffba44;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -247,14 +279,37 @@
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #ddd;
+  background-color: #ff8c4c;
   color: black;
 }
 
-/* Add a color to the active/current link */
-.topnav a.active {
-  background-color: #ff0000;
-  color: white;
+.topnav a.split {
+  float: right;
+  background-color: #ffda1a;
+  color: black;
 }
 
+.topnav a.split:hover {
+  background-color: #F44D8A;
+}
 
+.homepageButton{
+  width:150px;
+  height:150px;
+}
+
+.homepageButton:hover{
+  background-color: #F44D8A;
+}
+
+.paragraphBox{
+  width:700px;
+  height: 300px;
+  background-color: #d7cfda;
+}
+
+.paragraphBox div{
+  margin-left:50px;
+  margin-top:50px;
+
+}
