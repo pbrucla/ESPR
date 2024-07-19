@@ -11,67 +11,82 @@ export default function Home(){
     const [pub, setPub] = React.useState('');
     const [desc, setDesc] = React.useState('');
     
-    const submitting = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+
+    async function submitting(formData: FormData) {
+        const priv = formData.get("priv");
+        console.log(priv);
+        //web3.js stuff
         try {
-            const response = await fetch(`${back_url}/publish_package_sample`, {
-                method:"POST",
-                body: JSON.stringify({
-                    name: name,
-                    initial_version: vers,
-                    description: desc
-                })
-            })
-        } catch (error){
-            if (error instanceof Error){
+            const res = await fetch(
+                `${back_url}/publish_package_sample`,
+                {
+                    method: 'POST',
+                    body: formData,
+                },
+            );
+        } catch (error) {
+            if (error instanceof Error) {
                 console.error(error.message);
             }
         }
     }
+    // const submitting = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await fetch(`${back_url}/publish_package_sample`, {
+    //             method:"POST",
+    //             body: JSON.stringify({
+    //                 name: name,
+    //                 initial_version: vers,
+    //                 description: desc
+    //             })
+    //         })
+    //     } catch (error){
+    //         if (error instanceof Error){
+    //             console.error(error.message);
+    //         }
+    //     }
+    // }
     return (
         <main>
             <div className={styles.title}>
                 <h1>Publish a Package!</h1>
             </div>
             <div >
-                <form onSubmit={submitting}>
+                <form action={submitting}>
                     <div>
                         <div>
                             <h3>Package Name</h3>
                             <input
+                                name="name"
                                 id="name"
                                 type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
                                 maxLength={40}
                             />
                         </div>
                         <div>
                             <h3>Version Number</h3>
                             <input
-                                id="version"
+                                name="initial_version"
+                                id="initial_version"
                                 type="text"
-                                value={vers}
-                                onChange={(e) => setVers(e.target.value)}
                             />
                         </div>
                         <div>
                             <h3>Private Key</h3>
                             <p>Note: we do not store or send your private key over the web</p>
                             <input
+                                name="priv"
                                 id="priv"
                                 type="text"
-                                value={priv}
-                                onChange={(e) => setPriv(e.target.value)}
                             />
                         </div>
                         <div>
                             <h3>Package Description</h3>
                             <input
-                                id="desc"
+                                name="description"
+                                id="description"
                                 type="text"
-                                value={desc}
-                                onChange={(e) => setDesc(e.target.value)}
                             />
                         </div>
                     </div>
