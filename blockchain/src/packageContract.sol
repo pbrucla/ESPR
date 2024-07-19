@@ -10,21 +10,26 @@ contract PackageManager{
     event packageCreated(address sender, string packageName, string[] dependencyList); 
 
     function create_package(string calldata _name, string[] calldata _dependencies) public returns (address) {
-        Package p = new Package(tx.origin, _name, _dependencies);
+        Package p = new Package(payable(tx.origin), _name, _dependencies);
         packages.push(p);
         emit packageCreated(tx.origin, _name, _dependencies); 
         return address(p);
+    }
+
+    function get_packages() public view returns(Package[] memory) {
+        return packages;
     }
 }
 
 contract Package {
     string public name;
-    address public author;
+    address payable public author;
     string[] public versions;
     //naming convention: major, minor, patch (#.#.#) 
     //https://semver.org/
     uint[3] public current_version; 
     mapping(string => string[]) public dependencyMap; 
+    mapping(address => bool) public collaboratorMap;
     address[] public collaborators;
     bool public packageEnabled;
 
@@ -32,9 +37,10 @@ contract Package {
     event collaboratorAdded(address sender, address addedCollaborator, string packageName); 
     event packageDisabled(address sender, string packageStatus, string packageName); 
 
-    constructor(address _author, string memory _name, string[] memory dependencyList) {
+    constructor(address payable _author, string memory _name, string[] memory dependencyList) {
         author = _author;
         name = _name;
+        collaboratorMap[author] = true; 
         current_version[0] = 1; 
         current_version[1] = 0; 
         current_version[2] = 0; 
@@ -55,9 +61,8 @@ contract Package {
         _;
     } 
 
-    //need to fix for only collaborators and the author (for loop to iterate and check for collaborators)
-    modifier only_editors() {
-        require(tx.origin == author, "Not author");
+    modifier only_editors {
+        require(collaboratorMap[tx.origin], "Not a valid collaborator");
         _;
     }
 
@@ -99,25 +104,32 @@ contract Package {
 
     function add_collaborator(address collab_user) public only_author enabled {
         collaborators.push(collab_user); 
+        collaboratorMap[collab_user] = true;
         emit collaboratorAdded(tx.origin, collab_user, name);
     }
 
-    function get_collaborators() public enabled view returns (address[] memory) {
+    function get_collaborators() public view returns (address[] memory) {
         return collaborators;
     }
 
-    function get_name() public enabled view returns (string memory) {
+    function get_name() public view returns (string memory) {
         return name;
     }
 
-    function get_versions() public enabled view returns (string[] memory)
+    function get_versions() public view returns (string[] memory)
     {
         return versions;
     }
 
-    function get_dependencies(string calldata version_number) public enabled view returns (string[] memory) 
+    function get_dependencies(string calldata version_number) public view returns (string[] memory) 
     {
         return dependencyMap[version_number];
+    }
+
+    function donate() public payable {
+        // Call returns a boolean value indicating success or failure of transaction
+        (bool sent, ) = author.call{value: msg.value}("");
+        require(sent, "Failed to donate");
     }
 
     function disable() public only_author {
