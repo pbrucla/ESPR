@@ -112,6 +112,26 @@ def package_info(index):
         "versions": package_versions
     })
 
+@app.route("/events", methods=['GET'])
+def get_events():
+    try:
+        package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+        event_filter = package_manager_contract.events.packageCreated.create_filter(fromBlock=0)
+        events = event_filter.get_all_entries()
+
+        events_list = []
+        for event in events:
+            events_list.append({
+                "sender": event.args.sender,
+                "packageName": event.args.packageName,
+                "dependencyList": event.args.dependencyList,
+            })
+
+        return jsonify(events_list)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/packages_sample", methods=['GET'])
 def packages_sample():
     sample_package_1 = {
