@@ -73,7 +73,14 @@ You should be all set!
 
 1\. If you haven't already, install Foundry: <https://book.getfoundry.sh/getting-started/installation>.
 
-2\. In a new shell, run Anvil:
+2\. Install the OpenZeppelin dependency:
+```sh
+cd blockchain
+forge install OpenZeppelin/openzeppelin-contracts
+```
+Make sure you have no pending changes in git when you do this (you can check by running `git status`).
+
+3\. In a new shell, run Anvil:
 
 ```sh
 anvil
@@ -81,11 +88,11 @@ anvil
 
 If the command won't run, check to make sure your path environment variable contains the path to wherever you installed Foundry.
 
-3\. In a separate shell, deploy the smart contract (currently using the default Counter contract made by `forge init`):
+4\. In a separate shell, deploy the smart contract:
 
 ```sh
 cd blockchain
-forge create Counter --interactive
+forge create src/packageContract.sol:PackageManager --interactive
 ```
 
 When asked for a private key, copy and paste one from the shell running Anvil.
