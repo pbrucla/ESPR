@@ -10,7 +10,6 @@ const back_url = "http://127.0.0.1:5000";
 export default function Home(){
     async function submitting(formData: FormData) {
         const priv = formData.get("priv") as string;
-        console.log(priv);
         const name = formData.get('name');
         const version = formData.get('initial_version');
         const desc = formData.get('description');
