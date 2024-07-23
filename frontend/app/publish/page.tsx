@@ -19,11 +19,14 @@ export default function Home(){
         //web3.js stuff
         const web3 = new Web3('http://127.0.0.1:8545');
 
-        const addr = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-        const pacman_contract = new web3.eth.Contract(contract_abi, addr);
-        const account = web3.eth.accounts.wallet.add(priv);
-        const from_addr = account[0].address;
-        const pack_addr = await pacman_contract.methods.create_package(name, dep_arr).send({from: from_addr});
+        try {
+            const addr = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+            const pacman_contract = new web3.eth.Contract(contract_abi, addr);
+            const account = web3.eth.accounts.wallet.add(priv);
+            const from_addr = account[0].address;
+            const pack_addr = await pacman_contract.methods.create_package(name, dep_arr).send({from: from_addr});
+        } catch(error) {
+        }
         try {
             const res = await fetch(
                 `${back_url}/publish_package_sample`,
