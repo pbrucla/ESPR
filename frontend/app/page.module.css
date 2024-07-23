@@ -263,23 +263,30 @@
 }
 
 .topnav {
-  background-color: #000;
+  background-color: rgba(var(--background-start-rgb), 1);
   overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .topnav {
+    background-color: rgba(var(--background-start-rgb), 1)
+  }
 }
 
 /* Style the links inside the navigation bar */
 .topnav a {
   float: left;
-  color: #ffba44;
+  color: #ff8c4c;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  font-weight: bold;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #ff8c4c;
+  background-color: #ffba44;
   color: black;
 }
 
@@ -302,4 +309,43 @@
   position: relative;
   display: block;
   margin: auto;
+}
+
+.basictextcenter {
+  margin: auto;
+  padding: 1rem 6rem 1rem 6rem;
+  width: 70vw;
+  /* text-align: center; */
+  border-style: solid;
+  border-color: #ffba44;
+}
+
+.publishbody {
+  margin: auto;
+  padding: 1rem 6rem 1rem 6rem;
+}
+
+.publishtextinput {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submitbutton {
+  width: 100%;
+  background-color: #ffba44;
+  color: black;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submitbutton:hover {
+  background-color: #ffda1a;
 }

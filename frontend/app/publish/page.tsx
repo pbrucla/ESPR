@@ -45,12 +45,13 @@ export default function Home(){
             <div className={styles.title}>
                 <h1>Publish a Package!</h1>
             </div>
-            <div className={styles.basiccenter}>
+            <div className={styles.publishbody}>
                 <form action={submitting}>
-                    <div className={styles.basiccenter}>
+                    <div className={styles.basictextcenter}>
                         <div>
-                            <h3>Package Name</h3>
+                            <h2>Package Name</h2>
                             <input
+                                className={styles.publishtextinput}
                                 name="name"
                                 id="name"
                                 type="text"
@@ -58,39 +59,44 @@ export default function Home(){
                             />
                         </div>
                         <div>
-                            <h3>Version Number</h3>
+                            <h2>Version Number</h2>
                             <input
+                                className={styles.publishtextinput}
                                 name="initial_version"
                                 id="initial_version"
                                 type="text"
                             />
                         </div>
                         <div>
-                            <h3>Private Key</h3>
+                            <h2>Private Key</h2>
                             <p>Note: we do not store or send your private key over the web</p>
                             <input
+                                className={styles.publishtextinput}
                                 name="priv"
                                 id="priv"
                                 type="text"
                             />
                         </div>
                         <div>
-                            <h3>Package Description</h3>
+                            <h2>Package Description</h2>
                             <input
+                                className={styles.publishtextinput}
                                 name="description"
                                 id="description"
                                 type="text"
                             />
                         </div>
                         <div>
-                            <h3>Package Dependencies (enter comma-separated list)</h3>
+                            <h2>Package Dependencies </h2>
+                            <p>Enter comma-separated list of dependency names</p>
                             <input
+                                className={styles.publishtextinput}
                                 name="deps"
                                 id="deps"
                                 type="text"
                             />
                         </div>
-                        <button type="submit">
+                        <button className={styles.submitbutton} type="submit">
                             Publish Package!
                         </button>
                     </div>
