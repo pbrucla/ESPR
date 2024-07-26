@@ -235,7 +235,7 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
   width: 70vw;
-
+  color:#ffba44
 }
 
 .packitem {
@@ -266,13 +266,13 @@
 }
 
 .topnav {
-  background-color: rgba(var(--background-start-rgb), 1);
+  background-color: rgba(var(--background-end-rgb), 1);
   overflow: hidden;
 }
 
 @media (prefers-color-scheme: dark) {
   .topnav {
-    background-color: rgba(var(--background-start-rgb), 1)
+    background-color: rgba(var(--background-end-rgb), 1)
   }
 }
 
@@ -333,9 +333,10 @@
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: lightgrey;
 }
 
 .publishdescinput {
@@ -344,9 +345,10 @@
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: lightgrey;
 }
 
 .submitbutton {
