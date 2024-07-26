@@ -294,22 +294,69 @@
 }
 
 .homepageButton{
+  margin:10px;
   width:150px;
   height:150px;
 }
 
 .homepageButton:hover{
-  background-color: #F44D8A;
+  background-color: #00ffe5;
 }
 
 .paragraphBox{
-  width:700px;
-  height: 300px;
-  background-color: #d7cfda;
+  gap:100px;
+  flex-direction: row;
+  text-align: center;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  padding:2%;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 100%;
+  height: max-content;  
+  background-color: #ffffff;
+  border-top: 1px solid;
+
+  /*border-radius: 1rem;*/
 }
 
-.paragraphBox div{
-  margin-left:50px;
-  margin-top:50px;
+.textAndImage{
+  align-items: center;
+  display:inline-block;
+  justify-content: center; /* Centers items horizontally */
+  display: flex;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding-top:2rem;
+}
+
+.imageItem{
+  flex-grow: 1;
+}
+
+.textItem{
+  flex-grow: 2;
+}
+
+.buttonInItem{
+  margin:auto;
+  width:100%;
+  padding:2rem;
+  height:fit-content;
+}
+
+.item:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.horizontalItem:not(:last-child){
+  border-right: 1px solid;
 
 }
+
+
+
+

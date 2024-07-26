@@ -6,9 +6,9 @@ export default function Home() {
     <main>
       <div className={styles.paragraphBox}>
         <div>
-        <h1>PACKAGES ARE BLOCKS AND THEREFORE PACKAGES SHOULD GO ON THE BLOCKCHAIN</h1>
+        <h1>Want to start publishing your own packages?</h1>
         <p>
-          put your package on the blockchain now
+          Put your package on the blockchain today!
         </p>
        
         <a  href="/login/page.tsx">
@@ -21,12 +21,24 @@ export default function Home() {
       
       <div className={styles.paragraphBox}>
         <div>
-        <h1>NOT INTERESTED IN GETTING STARTED?</h1>
-        <a  href="/packages/page.tsx">
-        <button className = {styles.homepageButton}>
-          CLICK IF PRO
-        </button>
-        </a>
+        <h1>Interested in seeing the packages that others have published?</h1>
+          <div className={styles.textAndImage}>
+            <div className = {styles.textItem }>
+              <p className = {styles.item} >
+                stuff about the packages
+              </p>
+              <a className={styles.item} href="/packages/page.tsx">
+              <button className = {styles.buttonInItem}>
+                Click here!
+              </button>
+            </a>
+            </div>
+            <div className = {styles.imageItem}>
+              <p>
+                placeholder.img
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </main>
