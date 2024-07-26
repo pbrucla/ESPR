@@ -333,10 +333,9 @@
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ddd;
+  border: 1px solid #999;
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: lightgrey;
 }
 
 .publishdescinput {
@@ -345,10 +344,9 @@
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ddd;
+  border: 1px solid #999;
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: lightgrey;
 }
 
 .submitbutton {
