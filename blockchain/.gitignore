@@ -13,5 +13,5 @@ docs/
 # Dotenv file
 .env
 
-# Mac files
-.DS_store
+# Mac
+.DS_Store
