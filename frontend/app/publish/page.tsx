@@ -6,8 +6,7 @@ import { Web3 } from 'web3';
 import { contract_abi } from './abi.js';
 const back_url = "http://127.0.0.1:5000";
 
-
-export default function Home(){
+function UploadPack(){
     async function submitting(formData: FormData) {
         const priv = formData.get("priv") as string;
         const name = formData.get('name');
@@ -41,10 +40,7 @@ export default function Home(){
         }
     }
     return (
-        <main>
-            <div className={styles.title}>
-                <h1>Publish a Package!</h1>
-            </div>
+        <div>
             <div className={styles.publishbody}>
                 <form action={submitting}>
                     <div className={styles.basictextcenter}>
@@ -74,16 +70,15 @@ export default function Home(){
                                 className={styles.publishtextinput}
                                 name="priv"
                                 id="priv"
-                                type="text"
+                                type="password"
                             />
                         </div>
                         <div>
                             <h2>Package Description</h2>
-                            <input
-                                className={styles.publishtextinput}
+                            <textarea
+                                className={styles.publishdescinput}
                                 name="description"
                                 id="description"
-                                type="text"
                             />
                         </div>
                         <div>
@@ -96,12 +91,47 @@ export default function Home(){
                                 type="text"
                             />
                         </div>
+                        <div>
+                            <h2>Files</h2>
+                            <input 
+                                name="files"
+                                id="files"
+                                type="file"
+                                multiple={true}
+                            />
+                        </div>
                         <button className={styles.submitbutton} type="submit">
                             Publish Package!
                         </button>
                     </div>
                 </form>
             </div>
+        </div>
+    )
+}
+
+export default function Home(){
+    const [publish, setPublish] = React.useState(false);
+    return (
+        <main>
+            <div className={styles.title}>
+                <h1>Publish a Package!</h1>
+            </div>
+            <div className={styles.basictextcenter}>
+                <h2>How to Publish a Package:</h2>
+                <br/>
+                <ul>
+                    <li>Provide a package name, version, and description
+                    </li>
+                    <li>Version should be of the form x.y.z, for nonnegative integer x,y,z</li>
+                    <li>Provide your private key; this is not stored in any way, nor is it sent over the web</li>
+                    <li>Select the relevant files for your package</li>
+                    <li>You're good to go!</li>
+                </ul>
+                <br/>
+                <button className={styles.submitbutton} onClick={() => {setPublish(!publish)}}>Get Started!</button>
+            </div>
+            {publish && (<UploadPack/>)}
         </main>
     )
 }
