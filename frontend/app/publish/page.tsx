@@ -1,12 +1,14 @@
 'use client'
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import styles from "../page.module.css";
 import { Web3 } from 'web3';
 import { contract_abi } from './abi.js';
 const back_url = "http://127.0.0.1:5000";
 
 function UploadPack(){
+    const router = useRouter();
     async function submitting(formData: FormData) {
         const priv = formData.get("priv") as string;
         const name = formData.get('name');
@@ -24,6 +26,10 @@ function UploadPack(){
             const from_addr = account[0].address;
             const pack_addr = await pacman_contract.methods.create_package(name, dep_arr).send({from: from_addr});
         } catch(error) {
+            if (error instanceof Error){
+                console.error(error.message);
+            }
+            return;
         }
         try {
             const res = await fetch(
@@ -33,6 +39,9 @@ function UploadPack(){
                     body: formData,
                 },
             );
+            if (res.ok){
+                router.push('/publish/success');
+            }
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error.message);
