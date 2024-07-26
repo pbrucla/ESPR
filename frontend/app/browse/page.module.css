@@ -58,11 +58,10 @@
 
 .filterbtn {
     transition: width 0.3s ease-in-out;
-    background-color: red;
+    background-color: transparent;
     border: none;
 
     aspect-ratio: 1 / 1;
-    height: 2rem;
 }
 .filterbtn.close {
     display: block;

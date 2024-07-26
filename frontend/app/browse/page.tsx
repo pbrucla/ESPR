@@ -4,6 +4,9 @@ import styles from "./page.module.css";
 import React from 'react';
 import Link from 'next/link'
 
+import FilterBtn from "../../public/icons/filter.svg";
+import ClearBtn from "../../public/icons/clear.svg";
+
 const back_url = "http://127.0.0.1:5000";
 
 const include = new Set<string>([]);
@@ -122,12 +125,14 @@ export default function Browse(){
 
                     <div className={open ? styles.sideOpen : styles.sideClose}>
                         <button onClick={toggle} className={open ? styles.hide : `${styles.filterbtn} ${styles.close}`}>
+                            <FilterBtn />
                         </button>
 
                         {open && (
                             <div>
                                 <div className={styles.block}>
                                     <button onClick={toggle} className={`${styles.filterbtn} ${styles.open}`}>
+                                        <FilterBtn />
                                     </button>
                                 </div>
 
@@ -140,6 +145,7 @@ export default function Browse(){
                                         onChange={(e) => handleInput(e.target.value)}
                                     ></input>
                                     <button className={styles.searchbtn} onClick={() => ClearInput()}>
+                                        <ClearBtn />
                                     </button>
                                 </div>
                             </div>
