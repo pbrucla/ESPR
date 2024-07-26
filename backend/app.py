@@ -51,6 +51,8 @@ tx_hash = Package_Contract.constructor().transact({"from": account_0.address})
 receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 deployed_addr = receipt.contractAddress
 
+numcontracts = 0
+
 @app.route("/")
 def hello_world():
     # Example data
@@ -73,10 +75,16 @@ def hello_world():
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     print(f"Transaction sent with hash: {tx_hash.hex()}")
 
+    global numcontracts
+
+    package_address = ""
+
     # Wait for the transaction receipt with a longer timeout
     try:
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
         print(f"Transaction mined in block {receipt['blockNumber']}")
+        package_address = package_manager_contract.functions.packages(numcontracts).call()
+        numcontracts+=1
     except Exception as e:
         print(f"Error waiting for transaction receipt: {str(e)}")
         raise
@@ -87,15 +95,12 @@ def hello_world():
         
 	
 
-    return f"<p>Hello, World. Package successfully created. Go to /package_info/0 to view just created contract. if more than one contract was created then you can inc /0 to a 1 ... n to view it in order of when they were created with n being the newest contract.</p>"
+    return f"<p>Hello, World. Package successfully created. Go to /package_info/{package_address} to view just created contract.</p>"
 
-@app.route("/package_info/<int:index>", methods=['GET'])
+@app.route("/package_info/<string:package_address>", methods=['GET'])
 def package_info(index):
     # Create a contract instance
     package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
-
-    # Get the address of the created package
-    package_address = package_manager_contract.functions.packages(index).call()
 
     # ABI for the Package contract
     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
@@ -124,7 +129,7 @@ def get_events():
             events_list.append({
                 "sender": event.args.sender,
                 "packageName": event.args.packageName,
-                "dependencyList": event.args.dependencyList,
+                "dependencyList": event.args.dependencyList
             })
 
         return jsonify(events_list)
