@@ -158,12 +158,50 @@ def packages_sample():
     }
     return [sample_package_1, sample_package_2], 200
 
-@app.route("/publish_package_sample", methods=['POST'])
-def publish_package_sample():
-    name = request.form['name']
-    initial_version = request.form['initial_version']
-    description = request.form['description']
+@app.route("/publish_package", methods=['POST'])
+def publish_package():
+    packageName = request.form['name']
+    #initial_version = request.form['initial_version']
+    #description = request.form['description']
+    dependencies = request.form['dependencies']
 
+    # Create a contract instance
+    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+
+    # Build the transaction
+    unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
+        "from": account_0.address,
+        "nonce": w3.eth.get_transaction_count(account_0.address),
+    })
+
+    # Sign the transaction
+    signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key=private_key)
+
+    # Send the transaction
+    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    print(f"Transaction sent with hash: {tx_hash.hex()}")
+
+    global numcontracts
+
+    package_address = ""
+
+    # Wait for the transaction receipt with a longer timeout
+    try:
+        receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
+        print(f"Transaction mined in block {receipt['blockNumber']}")
+        package_address = package_manager_contract.functions.packages(numcontracts).call()
+        numcontracts+=1
+    except Exception as e:
+        print(f"Error waiting for transaction receipt: {str(e)}")
+        raise
+
+    # Check if the transaction was successful
+    if receipt.status != 1:
+        print("Transaction failed")
+        
+	
+
+    return f"<p>Package successfully created. Go to /package_info/{package_address} to view just created contract.</p>"
     return {"name": name, "initial_version": initial_version, "description": description}, 201
 
 if __name__ == "__main__":
