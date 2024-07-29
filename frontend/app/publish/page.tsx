@@ -61,6 +61,7 @@ function UploadPack(){
                                 id="name"
                                 type="text"
                                 maxLength={40}
+                                required
                             />
                         </div>
                         <div>
@@ -70,6 +71,7 @@ function UploadPack(){
                                 name="initial_version"
                                 id="initial_version"
                                 type="text"
+                                required
                             />
                         </div>
                         <div>
@@ -80,6 +82,7 @@ function UploadPack(){
                                 name="priv"
                                 id="priv"
                                 type="password"
+                                required
                             />
                         </div>
                         <div>
@@ -88,6 +91,7 @@ function UploadPack(){
                                 className={styles.publishdescinput}
                                 name="description"
                                 id="description"
+                                required
                             />
                         </div>
                         <div>
@@ -98,6 +102,7 @@ function UploadPack(){
                                 name="deps"
                                 id="deps"
                                 type="text"
+                                required
                             />
                         </div>
                         <div>
@@ -107,6 +112,7 @@ function UploadPack(){
                                 id="files"
                                 type="file"
                                 multiple={true}
+                                required
                             />
                         </div>
                         <button className={styles.submitbutton} type="submit">

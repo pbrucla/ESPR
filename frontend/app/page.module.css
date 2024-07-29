@@ -321,6 +321,7 @@
   /* text-align: center; */
   border-style: solid;
   border-color: #ffba44;
+  border-radius: 5px;
 }
 
 .publishbody {
