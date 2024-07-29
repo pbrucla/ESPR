@@ -1,5 +1,5 @@
 # from solcx import install_solc, set_solc_version, compile_standard
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from web3 import Web3
 import json
 import os
@@ -110,6 +110,9 @@ def hello_world():
 
 @app.route("/package_info/<package_address>", methods=['GET'])
 def package_info(package_address):
+    if not Web3.is_address(package_address):
+        abort(400)
+
     # Create a contract instance
     package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
@@ -133,7 +136,7 @@ def package_info(package_address):
 @app.route("/events", methods=['GET'])
 def get_events():
     try:
-        package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+        package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
         event_filter = package_manager_contract.events.packageCreated.create_filter(fromBlock=0)
         events = event_filter.get_all_entries()
 
