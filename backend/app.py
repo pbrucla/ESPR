@@ -1,12 +1,12 @@
-from solcx import install_solc, set_solc_version, compile_standard
+# from solcx import install_solc, set_solc_version, compile_standard
 from flask import Flask, request, jsonify
 from web3 import Web3
 import json
 import os
 
 # Install and set Solidity version
-install_solc('v0.8.2')
-set_solc_version('v0.8.2')
+# install_solc('v0.8.2')
+# set_solc_version('v0.8.2')
 
 app = Flask(__name__)
 
@@ -18,6 +18,7 @@ print(w3.is_connected())
 private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 account_0 = w3.eth.account.from_key(private_key)
 
+'''
 # Define file path and compile the contract
 file_path = os.path.abspath("../blockchain/src")
 name = "packageContract.sol"
@@ -44,9 +45,19 @@ with open('compiled_code.json', "w") as file:
 
 init_bytecode = contracts["packageContract.sol"]["PackageManager"]["evm"]["bytecode"]["object"]
 abi = contracts["packageContract.sol"]["PackageManager"]["abi"]
+'''
+
+with open("./artifacts/PackageManager.json", "r") as f:
+    package_manager_json = json.load(f)
+package_manager_bytecode = package_manager_json["bytecode"]["object"]
+package_manager_abi = package_manager_json["abi"]
+with open("./artifacts/Package.json", "r") as f:
+    package_instance_json = json.load(f)
+package_instance_bytecode = package_instance_json["bytecode"]["object"]
+package_instance_abi = package_instance_json["abi"]
 
 # Deploy the contract
-Package_Contract = w3.eth.contract(bytecode=init_bytecode, abi=abi)
+Package_Contract = w3.eth.contract(bytecode=package_manager_bytecode, abi=package_manager_abi)
 tx_hash = Package_Contract.constructor().transact({"from": account_0.address})
 receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 deployed_addr = receipt.contractAddress
@@ -60,7 +71,7 @@ def hello_world():
     dependencies = ['dep1', 'dep2', 'dep3']
 
     # Create a contract instance
-    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
     # Build the transaction
     unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
@@ -97,16 +108,18 @@ def hello_world():
 
     return f"<p>Hello, World. Package successfully created. Go to /package_info/{package_address} to view just created contract.</p>"
 
-@app.route("/package_info/<string:package_address>", methods=['GET'])
-def package_info(index):
+@app.route("/package_info/<package_address>", methods=['GET'])
+def package_info(package_address):
     # Create a contract instance
-    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
+    '''
     # ABI for the Package contract
     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
+    '''
 
     # Create a contract instance for the Package contract
-    package_contract = w3.eth.contract(address=package_address, abi=package_abi)
+    package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
 
     # Fetch data from the Package contract
     package_name = package_contract.functions.get_name().call()
@@ -166,7 +179,7 @@ def publish_package():
     dependencies = request.form['dependencies']
 
     # Create a contract instance
-    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=abi)
+    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
     # Build the transaction
     unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
