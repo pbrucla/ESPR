@@ -1,6 +1,10 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
+import flask
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/")
 def hello_world():
@@ -25,9 +29,12 @@ def packages_sample():
       "1.0.0"
     ]
   }
-  return [sample_package_1, sample_package_2], 200
+  response = flask.jsonify([sample_package_1, sample_package_2])
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  return response, 200
 
 @app.route("/publish_package_sample", methods=['POST'])
+@cross_origin()
 def publish_package_sample():
   name = request.form['name']
   initial_version = request.form['initial_version']
