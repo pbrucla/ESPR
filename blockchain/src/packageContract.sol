@@ -5,18 +5,18 @@ pragma solidity >=0.8.2 <0.9.0;
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract PackageManager{
-    Package[] public packages;
+    address[] public packages;
 
-    event packageCreated(address sender, string packageName, string[] dependencyList); 
+    event packageCreated(address sender, string packageName, string[] dependencyList, string description, string cidhash); 
 
-    function create_package(string calldata _name, string[] calldata _dependencies) public returns (address) {
-        Package p = new Package(payable(tx.origin), _name, _dependencies);
-        packages.push(p);
-        emit packageCreated(tx.origin, _name, _dependencies); 
+    function create_package(string calldata _name, string[] calldata _dependencies, string calldata _description, string calldata _cidhash) public returns (address) {
+        Package p = new Package(payable(tx.origin), _name, _dependencies, _description, _cidhash);
+        packages.push(address(p));
+        emit packageCreated(tx.origin, _name, _dependencies, _description, _cidhash); 
         return address(p);
     }
 
-    function get_packages() public view returns(Package[] memory) {
+    function get_packages() public view returns(address[] memory) {
         return packages;
     }
 }
@@ -25,11 +25,13 @@ contract Package {
     string public name;
     address payable public author;
     string[] public versions;
+    string description; 
     //naming convention: major, minor, patch (#.#.#) 
     //https://semver.org/
     uint[3] public current_version; 
     mapping(string => string[]) public dependencyMap; 
     mapping(address => bool) public collaboratorMap;
+    mapping(string => string) public cid_hashMap;
     address[] public collaborators;
     bool public packageEnabled;
 
@@ -37,9 +39,10 @@ contract Package {
     event collaboratorAdded(address sender, address addedCollaborator, string packageName); 
     event packageDisabled(address sender, string packageStatus, string packageName); 
 
-    constructor(address payable _author, string memory _name, string[] memory dependencyList) {
+    constructor(address payable _author, string memory _name, string[] memory dependencyList, string memory _description, string memory _cidhash) {
         author = _author;
         name = _name;
+        description = _description; 
         collaboratorMap[author] = true; 
         current_version[0] = 1; 
         current_version[1] = 0; 
@@ -52,6 +55,8 @@ contract Package {
         {
             dependencyMap["1.0.0"].push(dependencyList[i]); 
         }
+        //push offline pinning hash 
+        cid_hashMap["1.0.0"] = _cidhash; 
         //collaborators left empty for now
         packageEnabled = true;
     }
@@ -77,7 +82,7 @@ contract Package {
     }
 
     //update_status has 0,1,2 values corresponding to major, minor, patch updates 
-    function add_version(uint update_status, string[] memory dependencyList) public only_editors enabled check_valid_update(update_status) {
+    function add_version(uint update_status, string[] memory dependencyList, string memory cid_hash) public only_editors enabled check_valid_update(update_status) {
         if (update_status == 0) {
             current_version[0] += 1;
             current_version[1] = 0;
@@ -98,6 +103,8 @@ contract Package {
         for (uint256 i = 0; i < length; i++) {
             dependencyMap[version_name].push(dependencyList[i]);
         }
+        //map to cid hash 
+        cid_hashMap[version_name] = cid_hash; 
         emit packageVersionUpdate(tx.origin, name, version_name, dependencyList); 
     }
     
@@ -112,6 +119,18 @@ contract Package {
         return collaborators;
     }
 
+    function get_author() public view returns (address) {
+        return author; 
+    }
+
+    function get_enabled() public view returns (bool) {
+        return packageEnabled; 
+    }
+
+    function get_description() public view returns (string memory) {
+        return description;
+    }
+
     function get_name() public view returns (string memory) {
         return name;
     }
@@ -124,6 +143,18 @@ contract Package {
     function get_dependencies(string calldata version_number) public view returns (string[] memory) 
     {
         return dependencyMap[version_number];
+    }
+
+    function remove_collaborator(address removed_collab) public only_author enabled {
+        uint length = collaborators.length; 
+        for (uint256 i = 0; i < length; i++) {
+            if(collaborators[i] == removed_collab)
+            {
+                collaborators[i] = collaborators[length - 1]; 
+                collaborators.pop(); 
+                break; 
+            }
+        }
     }
 
     function donate() public payable {
