@@ -7,6 +7,8 @@ import os
 # Install and set Solidity version
 # install_solc('v0.8.2')
 # set_solc_version('v0.8.2')
+from flask_cors import CORS, cross_origin
+import flask
 
 app = Flask(__name__)
 
