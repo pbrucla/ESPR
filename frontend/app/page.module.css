@@ -270,11 +270,6 @@
   overflow: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-  .topnav {
-    background-color: rgba(var(--background-end-rgb), 1)
-  }
-}
 
 /* Style the links inside the navigation bar */
 .topnav a {
@@ -285,6 +280,7 @@
   text-decoration: none;
   font-size: 17px;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 /* Change the color of links on hover */
@@ -316,7 +312,7 @@
 
 .basictextcenter {
   margin: auto;
-  padding: 1rem 6rem 1rem 6rem;
+  padding: 1rem 6rem;
   width: 70vw;
   /* text-align: center; */
   border-style: solid;
@@ -365,4 +361,8 @@
 
 .submitbutton:hover {
   background-color: #ffda1a;
+}
+
+.errortext {
+  color: red;
 }
