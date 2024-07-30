@@ -1,13 +1,17 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import flask
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route("/")
 def hello_world():
   return "<p>Hello, World!</p>"
 
 @app.route("/packages_sample", methods=['GET'])
+@cross_origin()
 def packages_sample():
   sample_package_1 = {
     "name": "yahaha",
@@ -31,6 +35,7 @@ def packages_sample():
   return response, 200
 
 @app.route("/publish_package_sample", methods=['POST'])
+@cross_origin()
 def publish_package_sample():
   name = request.form['name']
   initial_version = request.form['initial_version']
@@ -40,6 +45,7 @@ def publish_package_sample():
 
 
 @app.route("/package_info_sample/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", methods=['GET'])
+@cross_origin()
 def package_info_sample_1():
   info = {
     "name": "yahaha",

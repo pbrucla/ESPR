@@ -5,51 +5,53 @@ import React from 'react';
 
 const back_url = "http://127.0.0.1:5000";
 
+type Dependencies = {
+  [key: string]: string[];
+}
 
 type Package = {
   name: string;
-  description: string;
-  version_history: string[];
+  author: string;
+  versions: string[];
+  dependencies: Dependencies;
+  collaborators: string[];
+  status: string;
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const name = params.slug;
+  const id = params.slug;
 
   const [pack, setPack] = React.useState<Package | null>();
   const [msg, setMsg] = React.useState<string | null>("Loading Challenges...");
 
-  /*
+  
   React.useEffect(() => {
     const getPack = async () => {
         try {
-            const response = await fetch(`${back_url}/packages_sample`);
+            const response = await fetch(`${back_url}/package_info_sample/${id}`);
             if (!response.ok){
                 throw new Error(`Response status: ${response.status}`);
             }
             const json: Package = await response.json();
             setPack(json);
-            setLoadingMsg(null);
+            setMsg(null);
         } catch (error){
             if (error instanceof Error){
-                setMsg("An unexpected error occurred");
+                setMsg("Package not found");
                 console.error(error.message);
+                setPack(null);
             }
         }
     };
     getPack();
-  },[]);
-  */
+  },[id]);
 
-  React.useEffect( () => {
-    setPack({name: 'test_pack', description: 'test_desc', version_history: ['1','2','3'] });
-    setMsg(null);
-  }, [] );
 
   if (pack === null) {
     return (
       <main>
         <div className={styles.title}>
-          <h1>{name}: Package not found</h1>
+          <h1>{id}: Package not found</h1>
         </div>
       </main>
     );
@@ -59,11 +61,35 @@ export default function Page({ params }: { params: { slug: string } }) {
     return (
       <main>
         <div className={styles.title}>
-          <h1>{name}: Loading...</h1>
+          <h1>{id}: Loading...</h1>
         </div>
       </main>
     );
   }
+
+  const earliestVersion = pack?.versions[0];
+
+  const versionHistory = (
+    <div style={{lineHeight: "2.5"}}>
+      {pack?.versions.map((version: string) => (
+        <div key={version} className={styles.hoverContainer}>
+          <br></br>
+          <p className={styles.hoverText}>{version}</p>
+          <div className={styles.hoverMenu} style={version === earliestVersion ? {transform: "translateY(-100%)"} : {}}>
+            {pack?.dependencies[version].map( (dep: string) =>
+            // could link to package
+              <a href="#" key={dep}>{dep}</a>
+            )}
+          </div>
+        </div>
+      )).reverse()}
+      <br></br>
+    </div>
+  );
+
+  const collabs = pack?.collaborators.join(', ');
+
+
 
   const packInfo = (
     <main>
@@ -74,20 +100,21 @@ export default function Page({ params }: { params: { slug: string } }) {
           <div style={{display: "flex"}}>
             <div style={{position: "relative", width: "70vw"}}>
                 <br></br>
-                <div style={{overflowWrap: "break-word", fontSize: "35px"}}>
-                    <b>Description:</b>
+                <div style={{overflowWrap: "break-word", fontSize: "30px"}}>
+                        <b>AUTHOR:</b> {pack?.author}
                 </div>
                 <br></br>
-                <div style={{overflowWrap: "break-word", fontSize: "25px"}}>{pack?.description}</div>
+                <div style={{overflowWrap: "break-word"}}>
+                        <b style={{fontSize: "25px"}}>Collaborators:</b>  <p style={{fontSize: "15px"}}> {collabs} </p>
+                </div>
                 <br></br>
+                <div style={{overflowWrap: "break-word", fontSize: "35px"}}>
+                        <b>STATUS: <span style={pack?.status === "alive" ? {color: "green"} : {color: "red"}}>{pack?.status}</span></b>
+                </div>
             </div>
             <div style={{overflowWrap: "break-word"}}>
               <b style={{fontSize: "25px"}}>Version History</b>
-              <div style={{lineHeight: "1.8"}}>
-                1
-                <br></br>
-                2
-              </div>
+              {versionHistory}
             </div>
           </div>
         </div>
