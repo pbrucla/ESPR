@@ -2,7 +2,6 @@
 
 import styles from "./page.module.css";
 import React from 'react';
-import Link from 'next/link'
 
 import FilterBtn from "../../public/icons/filter.svg";
 import ClearBtn from "../../public/icons/clear.svg";
@@ -15,6 +14,7 @@ let userInput = "";
 
 type Package = {
     name: string;
+    author: string;
     description: string;
     version_history: string[];
 }
@@ -103,8 +103,9 @@ export default function Browse(){
             <div className={styles.packitem}>
             <span>
                 <h2 className={styles.h2inline}>
-                    <a href={"/packages/" + data.name} className={styles.a}>{data.name}</a>
+                    <a href={"/packages/" + data.author} className={styles.a}>{data.name}</a>
                 </h2>
+                <h4 className={styles.h4inline}>{data.author}</h4>
                 <p className={styles.pinline}>{data.version_history[data.version_history.length-1]}</p>
             </span>
             <p>{data.description}</p>

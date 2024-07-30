@@ -11,10 +11,10 @@ def hello_world():
   return "<p>Hello, World!</p>"
 
 @app.route("/packages_sample", methods=['GET'])
-@cross_origin()
 def packages_sample():
   sample_package_1 = {
     "name": "yahaha",
+    "author":"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "description": "Yahaha!\nYou found me!\nBuh bye!",
     "version_history": [
       "1.0.0",
@@ -25,6 +25,7 @@ def packages_sample():
   }
   sample_package_2 = {
     "name": "cybercoin",
+    "author":"fake_author",
     "description": "Run your own node on the CyberCoin network!",
     "version_history": [
       "1.0.0"
