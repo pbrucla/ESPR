@@ -11,7 +11,7 @@ export default function Home() {
           Put your package on the blockchain today!
         </p>
        
-        <a  href="/login/page.tsx">
+        <a href="/publish/page.tsx">
         <button className = {styles.homepageButton}>
           Get started
         </button>
