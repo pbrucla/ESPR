@@ -299,10 +299,6 @@
   height:150px;
 }
 
-.homepageButton:hover{
-  background-color: #00ffe5;
-}
-
 .paragraphBox{
   gap:100px;
   flex-direction: row;
@@ -334,11 +330,11 @@
 }
 
 .imageItem{
-  flex-grow: 1;
+  flex-grow: 5;
 }
 
 .textItem{
-  flex-grow: 2;
+  flex-grow: 1;
 }
 
 .buttonInItem{

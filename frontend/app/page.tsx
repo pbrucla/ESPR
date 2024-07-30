@@ -25,7 +25,7 @@ export default function Home() {
           <div className={styles.textAndImage}>
             <div className = {styles.textItem }>
               <p className = {styles.item} >
-                stuff about the packages
+                Here are some of the packages that others have published
               </p>
               <a className={styles.item} href="/packages/page.tsx">
               <button className = {styles.buttonInItem}>
