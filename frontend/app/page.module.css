@@ -228,3 +228,77 @@
     transform: rotate(0deg);
   }
 }
+
+.title {
+  text-align: center;
+  margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 70vw;
+  color:#ffba44
+}
+
+.packitem {
+  border: 2px solid lightgrey;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  padding: 2rem;
+}
+
+.a {
+  color: skyblue;
+}
+
+.a:visited {
+  color: mediumpurple;
+}
+
+.a:hover{
+  text-decoration: underline;
+}
+
+.h2inline{
+  display: inline-block;
+}
+
+.pinline{
+  float:right;
+}
+
+.topnav {
+  background-color: rgba(var(--background-end-rgb), 1);
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .topnav {
+    background-color: rgba(var(--background-end-rgb), 1)
+  }
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #ff8c4c;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ffba44;
+  color: black;
+}
+
+.topnav a.split {
+  float: right;
+  background-color: #ffda1a;
+  color: black;
+}
+
+.topnav a.split:hover {
+  background-color: #F44D8A;
+}

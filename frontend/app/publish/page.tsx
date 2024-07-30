@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import styles from "../page.module.css";
+import styles from "./page.module.css";
 import { Web3 } from 'web3';
 import { contract_abi } from './abi.js';
 const back_url = "http://127.0.0.1:5000";
