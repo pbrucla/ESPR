@@ -231,11 +231,8 @@
 
 .title {
   text-align: center;
-  margin: auto;
   margin-top: 2rem;
   margin-bottom: 2rem;
-  width: 70vw;
-  color:#ffba44
 }
 
 .packitem {
@@ -266,30 +263,23 @@
 }
 
 .topnav {
-  background-color: rgba(var(--background-end-rgb), 1);
+  background-color: #000;
   overflow: hidden;
-}
-
-@media (prefers-color-scheme: dark) {
-  .topnav {
-    background-color: rgba(var(--background-end-rgb), 1)
-  }
 }
 
 /* Style the links inside the navigation bar */
 .topnav a {
   float: left;
-  color: #ff8c4c;
+  color: #ffba44;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
-  font-weight: bold;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #ffba44;
+  background-color: #ff8c4c;
   color: black;
 }
 
@@ -301,4 +291,64 @@
 
 .topnav a.split:hover {
   background-color: #F44D8A;
+}
+
+.homepageButton{
+  margin:10px;
+  width:150px;
+  height:150px;
+}
+
+.paragraphBox{
+  gap:100px;
+  flex-direction: row;
+  text-align: center;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  padding:2%;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 100%;
+  height: max-content;  
+  background-color: #ffffff;
+  border-top: 1px solid;
+
+  /*border-radius: 1rem;*/
+}
+
+.textAndImage{
+  align-items: center;
+  display:inline-block;
+  justify-content: center; /* Centers items horizontally */
+  display: flex;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding-top:2rem;
+}
+
+.imageItem{
+  flex-grow: 5;
+}
+
+.textItem{
+  flex-grow: 1;
+}
+
+.buttonInItem{
+  margin:auto;
+  width:100%;
+  padding:2rem;
+  height:fit-content;
+}
+
+.item:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.horizontalItem:not(:last-child){
+  border-right: 1px solid;
+
 }
