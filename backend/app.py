@@ -1,5 +1,5 @@
 # from solcx import install_solc, set_solc_version, compile_standard
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, render_template_string
 from web3 import Web3
 import json
 import os
@@ -64,49 +64,59 @@ deployed_addr = receipt.contractAddress
 
 numcontracts = 0
 
-@app.route("/")
-def hello_world():
-    # Example data
-    packageName = 'examplePackage'
-    dependencies = ['dep1', 'dep2', 'dep3']
-
-    # Create a contract instance
-    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
-
-    # Build the transaction
-    unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
-        "from": account_0.address,
-        "nonce": w3.eth.get_transaction_count(account_0.address),
-    })
-
-    # Sign the transaction
-    signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key=private_key)
-
-    # Send the transaction
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    print(f"Transaction sent with hash: {tx_hash.hex()}")
-
+@app.route("/", methods=['GET', 'POST'])
+def home():
     global numcontracts
-
     package_address = ""
+    message = ""
 
-    # Wait for the transaction receipt with a longer timeout
-    try:
-        receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
-        print(f"Transaction mined in block {receipt['blockNumber']}")
-        package_address = package_manager_contract.functions.packages(numcontracts).call()
-        numcontracts+=1
-    except Exception as e:
-        print(f"Error waiting for transaction receipt: {str(e)}")
-        raise
+    if request.method == 'POST':
+        packageName = request.form['package_name']
+        dependencies = request.form.getlist('dependencies')
 
-    # Check if the transaction was successful
-    if receipt.status != 1:
-        print("Transaction failed")
-        
-	
+        # Create a contract instance
+        package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
-    return f"<p>Hello, World. Package successfully created. Go to /package_info/{package_address} to view just created contract.</p>"
+        # Build the transaction
+        unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
+            "from": account_0.address,
+            "nonce": w3.eth.get_transaction_count(account_0.address),
+        })
+
+        # Sign the transaction
+        signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key=private_key)
+
+        # Send the transaction
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        print(f"Transaction sent with hash: {tx_hash.hex()}")
+
+        # Wait for the transaction receipt with a longer timeout
+        try:
+            receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
+            print(f"Transaction mined in block {receipt['blockNumber']}")
+            package_address = package_manager_contract.functions.packages(numcontracts).call()
+            numcontracts += 1
+        except Exception as e:
+            print(f"Error waiting for transaction receipt: {str(e)}")
+            message = "Error waiting for transaction receipt."
+
+        # Check if the transaction was successful
+        if receipt.status != 1:
+            message = "Transaction failed"
+        else:
+            message = f"Package successfully created. Go to /package_info/{package_address} to view the created contract."
+
+    # Render the form with the previous inputs and message
+    return render_template_string('''
+    <form method="post">
+        Package Name: <input type="text" name="package_name" value="{{ package_name }}" required><br>
+        Dependencies (comma separated): <input type="text" name="dependencies" value="{{ dependencies }}" required><br>
+        <input type="submit" value="Create Package">
+    </form>
+    <p>{{ message }}</p>
+    ''', package_name=request.form.get('package_name', ''),
+       dependencies=request.form.get('dependencies', ''),
+       message=message)
 
 @app.route("/package_info/<package_address>", methods=['GET'])
 def package_info(package_address):
@@ -153,26 +163,26 @@ def get_events():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/packages_sample", methods=['GET'])
-def packages_sample():
-    sample_package_1 = {
-        "name": "yahaha",
-        "description": "Yahaha!\nYou found me!\nBuh bye!",
-        "version_history": [
-            "1.0.0",
-            "1.1.0",
-            "2.0.0",
-            "2.0.1"
-        ]
-    }
-    sample_package_2 = {
-        "name": "cybercoin",
-        "description": "Run your own node on the CyberCoin network!",
-        "version_history": [
-            "1.0.0"
-        ]
-    }
-    return [sample_package_1, sample_package_2], 200
+# @app.route("/packages_sample", methods=['GET'])
+# def packages_sample():
+#     sample_package_1 = {
+#         "name": "yahaha",
+#         "description": "Yahaha!\nYou found me!\nBuh bye!",
+#         "version_history": [
+#             "1.0.0",
+#             "1.1.0",
+#             "2.0.0",
+#             "2.0.1"
+#         ]
+#     }
+#     sample_package_2 = {
+#         "name": "cybercoin",
+#         "description": "Run your own node on the CyberCoin network!",
+#         "version_history": [
+#             "1.0.0"
+#         ]
+#     }
+#     return [sample_package_1, sample_package_2], 200
 
 @app.route("/publish_package", methods=['POST'])
 def publish_package():
