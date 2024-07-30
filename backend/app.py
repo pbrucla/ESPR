@@ -62,11 +62,11 @@ tx_hash = Package_Contract.constructor().transact({"from": account_0.address})
 receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 deployed_addr = receipt.contractAddress
 
-numcontracts = 0
+numpackages = 0
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    global numcontracts
+    global numpackages
     package_address = ""
     message = ""
 
@@ -94,8 +94,8 @@ def home():
         try:
             receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
             print(f"Transaction mined in block {receipt['blockNumber']}")
-            package_address = package_manager_contract.functions.packages(numcontracts).call()
-            numcontracts += 1
+            package_address = package_manager_contract.functions.packages(numpackages).call()
+            numpackages += 1
         except Exception as e:
             print(f"Error waiting for transaction receipt: {str(e)}")
             message = "Error waiting for transaction receipt."
@@ -118,13 +118,33 @@ def home():
        dependencies=request.form.get('dependencies', ''),
        message=message)
 
+@app.route("/packages", methods=['GET'])
+def packages_sample():
+  # Create a contract instance
+  package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
+
+  packages = []
+  for i in range(numpackages):
+      package_address = package_manager_contract.functions.packages(i).call()
+
+      # Create a contract instance for the Package contract
+      package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
+      package_description = "temp"
+      package_name = package_contract.functions.get_name().call()
+      package_versions = package_contract.functions.get_versions().call()
+      packages.append({"name": package_name, "description" : package_description, "version_history" : package_versions})
+
+  response = jsonify(packages)
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  return response, 200
+
 @app.route("/package_info/<package_address>", methods=['GET'])
 def package_info(package_address):
     if not Web3.is_address(package_address):
         abort(400)
 
     # Create a contract instance
-    package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
+    #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
     '''
     # ABI for the Package contract
@@ -136,12 +156,23 @@ def package_info(package_address):
 
     # Fetch data from the Package contract
     package_name = package_contract.functions.get_name().call()
+    package_author = "temp"
     package_versions = package_contract.functions.get_versions().call()
+    package_dependencies = {}
+    for version in package_versions:
+      package_dependencies[version] = package_contract.functions.get_dependencies(version).call()
+    package_collaborators = package_contract.functions.get_collaborators().call()
+    package_status = "alive"
 
-    return jsonify({
-        "name": package_name,
-        "versions": package_versions
-    })
+    info = {
+      "name": package_name,
+      "author": package_author,
+      "versions": package_versions,
+      "dependencies": package_dependencies,
+      "collaborators": package_collaborators,
+      "status": package_status
+    }
+    return info, 200
 
 @app.route("/events", methods=['GET'])
 def get_events():
@@ -207,7 +238,7 @@ def publish_package():
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     print(f"Transaction sent with hash: {tx_hash.hex()}")
 
-    global numcontracts
+    global numpackages
 
     package_address = ""
 
@@ -215,8 +246,8 @@ def publish_package():
     try:
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
         print(f"Transaction mined in block {receipt['blockNumber']}")
-        package_address = package_manager_contract.functions.packages(numcontracts).call()
-        numcontracts+=1
+        package_address = package_manager_contract.functions.packages(numpackages).call()
+        numpackages+=1
     except Exception as e:
         print(f"Error waiting for transaction receipt: {str(e)}")
         raise
