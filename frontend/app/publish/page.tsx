@@ -24,7 +24,7 @@ function UploadPack(){
             const pacman_contract = new web3.eth.Contract(contract_abi, addr);
             const account = web3.eth.accounts.wallet.add(priv);
             const from_addr = account[0].address;
-            const pack_addr = await pacman_contract.methods.create_package(name, dep_arr).send({from: from_addr});
+            const pack_addr = await pacman_contract.methods.create_package(name, dep_arr, desc, ).send({from: from_addr});
         } catch(error) {
             if (error instanceof Error){
                 console.error(error.message);
