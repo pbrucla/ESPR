@@ -1,0 +1,120 @@
+.title {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.packitem {
+    border: 2px solid lightgrey;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 2rem;
+    height: 30vh;
+}
+
+.a {
+    color: skyblue;
+}
+
+.a:visited {
+    color: mediumpurple;
+}
+
+.a:hover{
+    text-decoration: underline;
+}
+
+.h2inline{
+    display: inline-block;
+}
+
+.pinline{
+    float:right;
+}
+
+/* PAGE LAYOUT */
+.sideOpen {
+    display: inline-block;
+    width: 25%;
+    height: 100%;
+}
+.cards {
+    display: inline-flex;
+    float: right;
+}
+.cards.full {
+    width: 100%;
+}
+.cards.contract {
+    width: 75%;
+}
+
+/* SIDEBAR FORMAT */
+.block {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 1rem 0.5rem;
+}
+
+.filterbtn {
+    transition: width 0.3s ease-in-out;
+    background-color: transparent;
+    border: none;
+
+    aspect-ratio: 1 / 1;
+}
+.filterbtn.close {
+    display: block;
+    margin: 1rem 5vw 4vw;
+}
+.filterbtn.open {
+    margin-left: auto;
+    margin-right: -0.5rem;
+}
+.hide {
+    display: none;
+}
+
+.dot {
+    height: 0.8rem;
+    width: 0.8rem;
+    margin-left: 0rem;
+    margin-right: 0.8rem;
+
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.search {
+    display: flex;
+    width: 24vw;
+    padding: 0.25rem 0.75rem 0.25rem;
+}
+.searchbar {
+    background-color: #d0d0d0;
+    color: #404040;
+    border: none;
+    border-radius: 1.25rem;
+    font-size: 0.8rem;
+
+    height: 2rem;
+    padding: 0 0.75rem;
+    width: calc(24vw - 4rem);
+    margin: 0.25rem;
+}
+.searchbtn {
+    border: none;
+    border-radius: 1.25rem;
+
+    height: 2rem;
+    width: 2.5rem;
+    padding: 0.5rem;
+    margin: 0.25rem;
+}
+
+/* loading msg format */
+.loadingMsg {
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bold;
+}

@@ -1,0 +1,45 @@
+.title {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.hoverContainer {
+    position: relative;
+}
+
+.hoverText {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.hoverMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    border-radius: 5px;
+    z-index: 1;
+    width: 15rem;
+  }
+
+.hoverMenu a {
+    color: black;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    
+}
+
+.hoverMenu a:hover {
+    background-color: #f1f1f1;
+}
+
+.hoverContainer:hover .hoverMenu {
+    display: block;
+  }
