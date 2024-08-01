@@ -29,11 +29,12 @@ export default function Home(){
     
             try {
                 const addr = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+                const cid_temp = "Qmf1rtki74jvYmGeqaaV51hzeiaa6DyWc98fzDiuPatzyy";
                 const pacman_contract = new web3.eth.Contract(contract_abi, addr);
                 const account = web3.eth.accounts.wallet.add(priv);
                 const from_addr = account[0].address;
-                const deployed = await pacman_contract.methods.create_package(name, dep_arr).call({from: from_addr}).then(function(result){console.log(result)});
-                const receipt = await pacman_contract.methods.create_package(name, dep_arr).send({from: from_addr});
+                const deployed = await pacman_contract.methods.create_package(name, dep_arr, desc, cid_temp).call({from: from_addr}).then(function(result){console.log(result)});
+                const receipt = await pacman_contract.methods.create_package(name, dep_arr, desc, cid_temp).send({from: from_addr});
                 if(chainErr) setChainErr(false);
             } catch(error) {
                 if (error instanceof Error){
