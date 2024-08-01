@@ -15,7 +15,6 @@ export default function Home(){
     const [chainErr, setChainErr] = React.useState(false);
     const [postErr, setPostErr] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
-    const [addr, setAddr] = React.useState('');
     function UploadPack(){
         async function submitting(formData: FormData) {
             const priv = formData.get("priv") as string;
