@@ -267,6 +267,7 @@
   overflow: hidden;
 }
 
+
 /* Style the links inside the navigation bar */
 .topnav a {
   float: left;
@@ -275,6 +276,8 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 /* Change the color of links on hover */
@@ -335,6 +338,12 @@
 
 .textItem{
   flex-grow: 1;
+  padding: 1rem 6rem;
+  width: 70vw;
+  /* text-align: center; */
+  border-style: solid;
+  border-color: #ffba44;
+  border-radius: 5px;
 }
 
 .buttonInItem{
@@ -351,4 +360,8 @@
 .horizontalItem:not(:last-child){
   border-right: 1px solid;
 
+}
+
+.errortext {
+  color: red;
 }

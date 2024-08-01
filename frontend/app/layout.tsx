@@ -22,6 +22,7 @@ export default function RootLayout({
           <a href='/'>Working Title</a>
           <a href='/browse'>Browse</a>
           <a href='/publish'>Publish</a>
+          <a href='/update'>Update</a>
         </div>
         <main>
           {children}
