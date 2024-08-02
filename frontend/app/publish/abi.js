@@ -19,6 +19,18 @@ const contract_abi = [
 				"internalType": "string[]",
 				"name": "dependencyList",
 				"type": "string[]"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "cidhash",
+				"type": "string"
 			}
 		],
 		"name": "packageCreated",
@@ -35,6 +47,16 @@ const contract_abi = [
 				"internalType": "string[]",
 				"name": "_dependencies",
 				"type": "string[]"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_cidhash",
+				"type": "string"
 			}
 		],
 		"name": "create_package",
@@ -49,6 +71,19 @@ const contract_abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "get_packages",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -59,7 +94,7 @@ const contract_abi = [
 		"name": "packages",
 		"outputs": [
 			{
-				"internalType": "contract Package",
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
@@ -67,7 +102,6 @@ const contract_abi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
-
+]
 export { contract_abi };
 
