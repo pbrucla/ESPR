@@ -75,12 +75,13 @@ def home():
     if request.method == 'POST':
         packageName = request.form['package_name']
         dependencies = request.form.getlist('dependencies')
+        description = request.form['description']
 
         # Create a contract instance
         package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
         # Build the transaction
-        unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
+        unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies, description, "tempcid").build_transaction({
             "from": account_0.address,
             "nonce": w3.eth.get_transaction_count(account_0.address),
         })
@@ -113,11 +114,13 @@ def home():
     <form method="post">
         Package Name: <input type="text" name="package_name" value="{{ package_name }}" required><br>
         Dependencies (comma separated): <input type="text" name="dependencies" value="{{ dependencies }}" required><br>
+        Description <input type="text" name="description" value="{{ description }}" required><br>
         <input type="submit" value="Create Package">
     </form>
     <p>{{ message }}</p>
     ''', package_name=request.form.get('package_name', ''),
        dependencies=request.form.get('dependencies', ''),
+       description=request.form.get('description', ''),
        message=message)
 
 @app.route("/packages", methods=['GET'])
@@ -160,6 +163,7 @@ def package_info(package_address):
     package_name = package_contract.functions.get_name().call()
     package_author = package_contract.functions.get_author().call()
     package_versions = package_contract.functions.get_versions().call()
+    package_description = package_contract.functions.get_description().call()
     package_dependencies = {}
     for version in package_versions:
       package_dependencies[version] = package_contract.functions.get_dependencies(version).call()
@@ -172,7 +176,8 @@ def package_info(package_address):
       "versions": package_versions,
       "dependencies": package_dependencies,
       "collaborators": package_collaborators,
-      "status": package_status
+      "status": package_status,
+      "description": package_description
     }
     return info, 200
 
