@@ -13,9 +13,9 @@ def hello_world():
 @app.route("/packages_sample", methods=['GET'])
 def packages_sample():
   sample_package_1 = {
-    "name": "yahaha",
+    "name": "Sample package",
     "author":"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-    "description": "Yahaha!\nYou found me!\nBuh bye!",
+    "description": "Sample package for testing purposes",
     "version_history": [
       "1.0.0",
       "1.1.0",
@@ -25,7 +25,7 @@ def packages_sample():
   }
   sample_package_2 = {
     "name": "cybercoin",
-    "author":"fake_author",
+    "author":"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92255",
     "description": "Run your own node on the CyberCoin network!",
     "version_history": [
       "1.0.0"
@@ -49,7 +49,7 @@ def publish_package_sample():
 @cross_origin()
 def package_info_sample_1():
   info = {
-    "name": "yahaha",
+    "name": "Sample package",
     "author": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "versions": [
       "1.0.0",
