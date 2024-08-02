@@ -131,7 +131,7 @@ def packages_sample():
 
       # Create a contract instance for the Package contract
       package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
-      package_description = "temp"
+      package_description = package_contract.functions.description().call()
       package_name = package_contract.functions.get_name().call()
       package_versions = package_contract.functions.get_versions().call()
       packages.append({"name": package_name, "description" : package_description, "version_history" : package_versions})
@@ -158,7 +158,7 @@ def package_info(package_address):
 
     # Fetch data from the Package contract
     package_name = package_contract.functions.get_name().call()
-    package_author = "temp"
+    package_author = package_contract.functions.get_author().call()
     package_versions = package_contract.functions.get_versions().call()
     package_dependencies = {}
     for version in package_versions:
