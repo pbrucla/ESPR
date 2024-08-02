@@ -76,12 +76,14 @@ def home():
         packageName = request.form['package_name']
         dependencies = request.form.getlist('dependencies')
         description = request.form['description']
+        #cidhash = request.form['cid']
+        cidhash = "temp"
 
         # Create a contract instance
         package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
         # Build the transaction
-        unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies, description, "tempcid").build_transaction({
+        unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies, description, cidhash).build_transaction({
             "from": account_0.address,
             "nonce": w3.eth.get_transaction_count(account_0.address),
         })
@@ -224,16 +226,16 @@ def get_events():
 
 @app.route("/publish_package", methods=['POST'])
 def publish_package():
-    packageName = request.form['name']
-    #initial_version = request.form['initial_version']
-    #description = request.form['description']
-    dependencies = request.form['dependencies']
-
+    packageName = request.form['package_name']
+    dependencies = request.form.getlist('dependencies')
+    description = request.form['description']
+    #cidhash = request.form['cid']
+    cidhash = "temp"
     # Create a contract instance
     package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
     # Build the transaction
-    unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies).build_transaction({
+    unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies, description, cidhash).build_transaction({
         "from": account_0.address,
         "nonce": w3.eth.get_transaction_count(account_0.address),
     })
@@ -245,28 +247,21 @@ def publish_package():
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     print(f"Transaction sent with hash: {tx_hash.hex()}")
 
-    global numpackages
-
-    package_address = ""
-
     # Wait for the transaction receipt with a longer timeout
     try:
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
         print(f"Transaction mined in block {receipt['blockNumber']}")
         package_address = package_manager_contract.functions.packages(numpackages).call()
-        numpackages+=1
+        numpackages += 1
     except Exception as e:
         print(f"Error waiting for transaction receipt: {str(e)}")
-        raise
+        message = "Error waiting for transaction receipt."
 
     # Check if the transaction was successful
     if receipt.status != 1:
-        print("Transaction failed")
-        
-	
-
-    return f"<p>Package successfully created. Go to /package_info/{package_address} to view just created contract.</p>"
-    return {"name": name, "initial_version": initial_version, "description": description}, 201
+        message = "Transaction failed"
+    else:
+        message = f"Package successfully created. Go to /package_info/{package_address} to view the created contract."
 
 if __name__ == "__main__":
     app.run(debug=True)
