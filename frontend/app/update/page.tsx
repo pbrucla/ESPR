@@ -6,13 +6,13 @@ import styles from "../page.module.css";
 import xstyle from "./page.module.css";
 import publishstyles from "../publish/page.module.css";
 import { Web3 } from 'web3';
-import { contract_abi } from '../publish/abi';
 import { package_abi } from './packAbi.js'
 
 const back_url = "http://127.0.0.1:5000";
 
 export default function Home(){
     const web3 = new Web3('http://127.0.0.1:8545');
+    const router = useRouter();
     const [updateVersion, setUpdateVersion] = React.useState(true);
     const [addCollab, setAddCollab] = React.useState(false);
     const [disable, setDisable] = React.useState(false);
@@ -36,6 +36,7 @@ export default function Home(){
 
             const receipt = await pack_contract.methods.add_version(status, dep_arr, cid_temp).send({from: from_addr});
             console.log('success');
+            router.push('/update/success');
         } catch (error) {
             if (error instanceof Error){
                 console.error(error.message);
@@ -57,12 +58,14 @@ export default function Home(){
 
             const receipt = await pack_contract.methods.add_collaborator(redguy).send({from: from_addr});
             console.log('success');
+            router.push('/update/success');
         } catch (error) {
             if (error instanceof Error){
                 console.error(error.message);
             }
             return;
         }
+        
     }
     function VersionForm() {
         return (
@@ -205,6 +208,7 @@ export default function Home(){
 
             const receipt = await pack_contract.methods.disable().send({from: from_addr});
             console.log('success');
+            router.push('/update/success');
         } catch (error) {
             if (error instanceof Error){
                 console.log(error.message);
