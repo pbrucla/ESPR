@@ -39,6 +39,21 @@ poetry run flask run
 
 You should be all set!
 
+## Changes to the smart contracts
+5\. If there is a change to the smart contracts, you'll need to update the files in the artifacts folder (only one person needs to do this, once the change is made everyone will be good to go). Go to the blockchain folder and build the project.
+```sh
+cd blockchain
+forge build
+```
+
+6\. Inside the blockchain folder, go to out/packageContract.sol and copy the files inside there into the artifacts folder in backend.
+```sh
+cd out/packageContract.sol
+# copy the files here into backend/artifacts
+```
+
+You should be all set!
+
 # Frontend
 
 1\. Install a recent version of Node from <https://nodejs.org/>.
