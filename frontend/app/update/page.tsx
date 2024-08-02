@@ -3,26 +3,31 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import styles from "../page.module.css";
+import xstyle from "./page.module.css";
+import publishstyles from "../publish/page.module.css";
 import { Web3 } from 'web3';
 import { contract_abi } from '../publish/abi';
 
 const back_url = "http://127.0.0.1:5000";
 
 export default function Home(){
+    const [updateVersion, setUpdateVersion] = React.useState(true);
+    const [addCollab, setAddCollab] = React.useState(false);
+    const [disable, setDisable] = React.useState(false);
     async function submitting(formData: FormData) {}
-    return (
-        <main>
-            <div className={styles.title}>
-                <h1>Update a Package</h1>
-            </div>
-            <div className={styles.publishbody}>
+    function VersionForm() {
+        return (
+            <div className={publishstyles.publishbody}>
+                <div className={styles.title}>
+                    <h2>Updating a Package</h2>
+                </div>
                     <form action={submitting}>
-                        <div className={styles.basictextcenter}>
+                        <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
                                 <p>Prefix with '0x'</p>
                                 <input
-                                    className={styles.publishtextinput}
+                                    className={publishstyles.publishtextinput}
                                     name="address"
                                     id="address"
                                     type="text"
@@ -35,7 +40,7 @@ export default function Home(){
                                 <h2>Private Key</h2>
                                 <p>Note: we do not store or send your private key over the web</p>
                                 <input
-                                    className={styles.publishtextinput}
+                                    className={publishstyles.publishtextinput}
                                     name="priv"
                                     id="priv"
                                     type="password"
@@ -45,7 +50,7 @@ export default function Home(){
                             <div>
                                 <h2>Update Description</h2>
                                 <textarea
-                                    className={styles.publishdescinput}
+                                    className={publishstyles.publishdescinput}
                                     name="description"
                                     id="description"
                                     required
@@ -53,9 +58,12 @@ export default function Home(){
                             </div>
                             <div>
                                 <h2>Update Dependencies </h2>
-                                <p>Enter comma-separated list of dependency names</p>
+                                <p>Enter comma-separated list of the addresses of ALL dependencies</p>
+                                {
+                                    //consider changing this to a textarea field instead since addresses are kinda long
+                                }
                                 <input
-                                    className={styles.publishtextinput}
+                                    className={publishstyles.publishtextinput}
                                     name="deps"
                                     id="deps"
                                     type="text"
@@ -76,12 +84,122 @@ export default function Home(){
                                 <br/>
                             </div>
                             <br/>
-                            <button className={styles.submitbutton} type="submit">
-                                Publish Package!
+                            <button className={publishstyles.submitbutton} type="submit"> 
+                                Update Package!
                             </button>
                         </div>
                     </form>
                 </div>
+        )
+    }
+
+    function CollaboratorForm() {
+        return (
+            <div className={publishstyles.publishbody}>
+                <div className={styles.title}>
+                    <h2>Adding a Collaborator</h2>
+                </div>
+                    <form action={submitting}>
+                        <div className={publishstyles.basictextcenter}>
+                            <div>
+                                <h2>Package Address</h2>
+                                <p>Prefix with '0x'</p>
+                                <input
+                                    className={publishstyles.publishtextinput}
+                                    name="address"
+                                    id="address"
+                                    type="text"
+                                    maxLength={42}
+                                    minLength={42}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <h2>Private Key</h2>
+                                <p>Note: we do not store or send your private key over the web</p>
+                                <input
+                                    className={publishstyles.publishtextinput}
+                                    name="priv"
+                                    id="priv"
+                                    type="password"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <h2>Collaborator Address</h2>
+                                <input
+                                    className={publishstyles.publishtextinput}
+                                    name="collab"
+                                    id="collab"
+                                    type="text"
+                                    required
+                                />
+                            </div>
+                            <br/>
+                            <button className={publishstyles.submitbutton} type="submit"> 
+                                Add Collaborator!
+                            </button>
+                        </div>
+                    </form>
+                </div>
+        )
+    }
+
+    function DisableForm() {
+        return (
+            <div className={publishstyles.publishbody}>
+                <div className={styles.title}>
+                    <h2>Disabling a Package</h2>
+                </div>
+                    <form action={submitting}>
+                        <div className={publishstyles.basictextcenter}>
+                            <div>
+                                <h2>Package Address</h2>
+                                <p>Prefix with '0x'</p>
+                                <input
+                                    className={publishstyles.publishtextinput}
+                                    name="address"
+                                    id="address"
+                                    type="text"
+                                    maxLength={42}
+                                    minLength={42}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <h2>Private Key</h2>
+                                <p>Note: we do not store or send your private key over the web</p>
+                                <input
+                                    className={publishstyles.publishtextinput}
+                                    name="priv"
+                                    id="priv"
+                                    type="password"
+                                    required
+                                />
+                            </div>
+                            <br/>
+                            <button className={publishstyles.submitbutton} type="submit"> 
+                                Disable Package!
+                            </button>
+                        </div>
+                    </form>
+                </div>
+        )
+    }
+
+    return (
+        <main>
+            <div className={styles.title}>
+                <h1>Update a Package</h1>
+            </div>
+            <div className={xstyle.buttongroup}>
+                <button onClick={() => {setUpdateVersion(true); setAddCollab(false); setDisable(false);}}>Add Version</button>
+                <button onClick={() => {setUpdateVersion(false); setAddCollab(true); setDisable(false);}}>Add Collaborator</button>
+                <button onClick={() => {setUpdateVersion(false); setAddCollab(false); setDisable(true);}}>Disable Package</button>
+            </div> 
+            {updateVersion && <VersionForm/>}
+            {addCollab && <CollaboratorForm/>}
+            {disable && <DisableForm/>}
         </main>
     )
 }
