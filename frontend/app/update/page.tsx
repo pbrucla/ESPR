@@ -12,10 +12,31 @@ import { package_abi } from './packAbi.js'
 const back_url = "http://127.0.0.1:5000";
 
 export default function Home(){
+    const web3 = new Web3('http://127.0.0.1:8545');
     const [updateVersion, setUpdateVersion] = React.useState(true);
     const [addCollab, setAddCollab] = React.useState(false);
     const [disable, setDisable] = React.useState(false);
     async function submitting(formData: FormData) {}
+    async function submitCollab(formData: FormData) {
+        
+        try {
+            const priv = formData.get("priv") as string;
+            const addr = formData.get("address") as string;
+            const redguy = formData.get("collab") as string;
+
+            const pack_contract = new web3.eth.Contract(package_abi, addr);
+            const acct = web3.eth.accounts.wallet.add(priv);
+            const from_addr = acct[0].address;
+
+            const receipt = await pack_contract.methods.add_collaborator(redguy).send({from: from_addr});
+            console.log('success');
+        } catch (error) {
+            if (error instanceof Error){
+                console.log(error.message);
+            }
+            return;
+        }
+    }
     function VersionForm() {
         return (
             <div className={publishstyles.publishbody}>
@@ -100,7 +121,7 @@ export default function Home(){
                 <div className={styles.title}>
                     <h2>Adding a Collaborator</h2>
                 </div>
-                    <form action={submitting}>
+                    <form action={submitCollab}>
                         <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
@@ -147,7 +168,6 @@ export default function Home(){
     }
 
     async function submitDisable(formData: FormData) {
-        const web3 = new Web3('http://127.0.0.1:8545');
         try {
             const priv = formData.get("priv") as string;
             const addr = formData.get("address") as string;
