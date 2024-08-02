@@ -16,7 +16,34 @@ export default function Home(){
     const [updateVersion, setUpdateVersion] = React.useState(true);
     const [addCollab, setAddCollab] = React.useState(false);
     const [disable, setDisable] = React.useState(false);
-    async function submitting(formData: FormData) {}
+    async function submitting(formData: FormData) {
+        const status = formData.get("update-type");
+        console.log(status);
+    }
+
+    async function submitVersion(formData: FormData){
+        try {
+            const priv = formData.get("priv") as string;
+            const addr = formData.get("address") as string;
+            const raw_deps = formData.get('deps') as string;
+            const status = formData.get("update-type");
+            const dep_arr = raw_deps.split(',');
+            const cid_temp = "Qmf1rtki74jvYmGeqaaV51hzeiaa6DyWc98fzDiuPatzyy";
+
+            const pack_contract = new web3.eth.Contract(package_abi, addr);
+            const acct = web3.eth.accounts.wallet.add(priv);
+            const from_addr = acct[0].address;
+
+            const receipt = await pack_contract.methods.add_version(status, dep_arr, cid_temp).send({from: from_addr});
+            console.log('success');
+        } catch (error) {
+            if (error instanceof Error){
+                console.error(error.message);
+            }
+            return;
+        }
+    }
+
     async function submitCollab(formData: FormData) {
         
         try {
@@ -32,7 +59,7 @@ export default function Home(){
             console.log('success');
         } catch (error) {
             if (error instanceof Error){
-                console.log(error.message);
+                console.error(error.message);
             }
             return;
         }
@@ -43,7 +70,7 @@ export default function Home(){
                 <div className={styles.title}>
                     <h2>Updating a Package</h2>
                 </div>
-                    <form action={submitting}>
+                    <form action={submitVersion}>
                         <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
@@ -70,14 +97,14 @@ export default function Home(){
                                 />
                             </div>
                             <div>
-                                <h2>Update Description</h2>
-                                <textarea
-                                    className={publishstyles.publishdescinput}
-                                    name="description"
-                                    id="description"
-                                    required
-                                />
+                                <h2>Update Type</h2>
+                                <select name="update-type" id="update-type" className={xstyle.spacing}>
+                                    <option value="0">Major Update</option>
+                                    <option value="1">Minor Update</option>
+                                    <option value="2">Patch</option>
+                                </select>
                             </div>
+                            <br/>
                             <div>
                                 <h2>Update Dependencies </h2>
                                 <p>Enter comma-separated list of the addresses of ALL dependencies</p>

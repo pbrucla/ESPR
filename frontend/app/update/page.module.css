@@ -25,3 +25,7 @@
   .buttongroup button:hover {
     background-color: #f44d8a;
   }
+
+  .spacing {
+    margin-top: 10px;
+  }
