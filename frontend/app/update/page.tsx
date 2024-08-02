@@ -7,6 +7,7 @@ import xstyle from "./page.module.css";
 import publishstyles from "../publish/page.module.css";
 import { Web3 } from 'web3';
 import { contract_abi } from '../publish/abi';
+import { package_abi } from './packAbi.js'
 
 const back_url = "http://127.0.0.1:5000";
 
@@ -145,13 +146,33 @@ export default function Home(){
         )
     }
 
+    async function submitDisable(formData: FormData) {
+        const web3 = new Web3('http://127.0.0.1:8545');
+        try {
+            const priv = formData.get("priv") as string;
+            const addr = formData.get("address") as string;
+
+            const pack_contract = new web3.eth.Contract(package_abi, addr);
+            const acct = web3.eth.accounts.wallet.add(priv);
+            const from_addr = acct[0].address;
+
+            const receipt = await pack_contract.methods.disable().send({from: from_addr});
+            console.log('success');
+        } catch (error) {
+            if (error instanceof Error){
+                console.log(error.message);
+            }
+            return;
+        }
+    }
+
     function DisableForm() {
         return (
             <div className={publishstyles.publishbody}>
                 <div className={styles.title}>
                     <h2>Disabling a Package</h2>
                 </div>
-                    <form action={submitting}>
+                    <form action={submitDisable}>
                         <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
