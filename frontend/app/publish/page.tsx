@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import styles from "./page.module.css";
 import { Web3 } from 'web3';
 import { contract_abi } from './abi.js';
@@ -10,7 +9,6 @@ const back_url = "http://127.0.0.1:5000";
 
 
 export default function Home(){
-    const router = useRouter();
     const [publish, setPublish] = React.useState(false);
     const [stinky, setStinky] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
@@ -32,7 +30,6 @@ export default function Home(){
                 const json = await res.json();
                 const addr = json['address'];
                 console.log(addr);
-                const cid_temp = "Qmf1rtki74jvYmGeqaaV51hzeiaa6DyWc98fzDiuPatzyy";
                 const pacman_contract = new web3.eth.Contract(contract_abi, addr);
                 const account = web3.eth.accounts.wallet.add(priv);
                 const from_addr = account[0].address;
