@@ -13,6 +13,8 @@ from flask_cors import CORS, cross_origin
 import flask
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Connect to local Ethereum node
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
@@ -131,6 +133,12 @@ def home():
        dependencies=request.form.get('dependencies', ''),
        description=request.form.get('description', ''),
        message=message)
+
+@app.route("/contract_address", methods=['GET'])
+@cross_origin()
+def contract_address():
+    response = {"address": deployed_addr}
+    return response, 200
 
 @app.route("/packages", methods=['GET'])
 def packages_sample():
@@ -260,6 +268,7 @@ def update_package(package_address, version_number, update_status, new_dependenc
     package_contract.functions.add_version(update_status, package_dependencies, ipfs_hash).call()
 
 @app.route("/upload_package", methods=['POST']) 
+@cross_origin()
 def upload_package():
     # Ensure a file is part of the request
     if 'file' not in request.files:
