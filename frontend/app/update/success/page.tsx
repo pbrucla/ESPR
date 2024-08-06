@@ -1,5 +1,5 @@
 'use client'
-import styles from '../page.module.css';
+import styles from '../../publish/page.module.css';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <main>
             <div className={styles.title}>
-                <h1>Your Package has been successfully uploaded!</h1>
+                <h1>Package Operation Successful!</h1>
                 <br/>
                 <button className={styles.submitbutton} onClick={() => router.push('/')}>Back to Home Page!</button>
             </div>

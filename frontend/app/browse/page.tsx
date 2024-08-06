@@ -14,9 +14,9 @@ let userInput = "";
 
 type Package = {
     name: string;
-    author: string;
     description: string;
     version_history: string[];
+    package_address: string;
 }
 
 type DisplayType = {
@@ -49,6 +49,7 @@ export default function Browse(){
 
     /* filter system */
     const [show, setShow] = React.useState<DisplayType[]>([]);
+    const [noShow, setNoShow] = React.useState<boolean>(false);
 
     function ApplyFilter() {
         show.forEach((pack) => {
@@ -70,7 +71,7 @@ export default function Browse(){
     React.useEffect(() => {
         const getPacks = async () => {
             try {
-                const response = await fetch(`${back_url}/packages_sample`);
+                const response = await fetch(`${back_url}/packages`);
                 if (!response.ok){
                     throw new Error(`Response status: ${response.status}`);
                 }
@@ -91,29 +92,35 @@ export default function Browse(){
         getPacks();
     },[]);
 
-    const [loadingMsg, setLoadingMsg] = React.useState<string | null>("Loading Challenges...");
+    React.useEffect( () => {
+        if (show.every(item => item.display === false))
+            setNoShow(true);
+        else
+            setNoShow(false);
+    }, [show])
+
+    const [loadingMsg, setLoadingMsg] = React.useState<string | null>("Loading Packages...");
 
 
-
-
-    const toRender = show.map(({data, display}) => 
-    <div key={data.name}>
-        {
-        display ? (
-            <div className={styles.packitem}>
-            <span>
-                <h2 className={styles.h2inline}>
-                    <a href={"/packages/" + data.author} className={styles.a}>{data.name}</a>
-                </h2>
-                <h4 className={styles.h4inline}>{data.author}</h4>
-                <p className={styles.pinline}>{data.version_history[data.version_history.length-1]}</p>
-            </span>
-            <p>{data.description}</p>
+    const toRender = (
+        show.map(({data, display}) => 
+            <div key={data.name}>
+                {
+                display ? (
+                    <div className={styles.packitem}>
+                    <span>
+                        <h2 className={styles.h2inline}>
+                            <a href={"/packages/" + data.package_address} className={styles.a}>{data.name}</a>
+                        </h2>
+                        <p className={styles.pinline}>{data.version_history[data.version_history.length-1]}</p>
+                    </span>
+                    <p>{data.description}</p>
+                    </div>
+                )
+                : null
+                }
             </div>
         )
-        : null
-        }
-    </div>
     );
 
     return (
@@ -154,10 +161,14 @@ export default function Browse(){
                     </div>
                     {/*FILTERBAR: end*/}
 
-                    {loadingMsg && <div className={styles.loadingMsg}>{loadingMsg}</div>}
+                    {loadingMsg && <div className={styles.errorMsg}>{loadingMsg}</div>}
 
 
-                    {toRender}
+                    {(loadingMsg === null && noShow) ?
+                        <div className={styles.errorMsg}>
+                            No Packages Found
+                        </div> 
+                    : toRender}
                 </div>
             </div>
         </main>
