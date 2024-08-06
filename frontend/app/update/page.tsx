@@ -24,17 +24,30 @@ export default function Home(){
     async function submitVersion(formData: FormData){
         try {
             const priv = formData.get("priv") as string;
+            formData.delete("priv");
             const addr = formData.get("address") as string;
             const raw_deps = formData.get('deps') as string;
             const status = formData.get("update-type");
             const dep_arr = raw_deps.split(',');
-            const cid_temp = "Qmf1rtki74jvYmGeqaaV51hzeiaa6DyWc98fzDiuPatzyy";
+
+            const res = await fetch(
+                `${back_url}/update_package`,
+                {
+                    method: 'POST',
+                    body: formData
+                }
+            );
+
+            const cid = await res.text();
+
+            // const cid_temp = "Qmf1rtki74jvYmGeqaaV51hzeiaa6DyWc98fzDiuPatzyy";
 
             const pack_contract = new web3.eth.Contract(package_abi, addr);
             const acct = web3.eth.accounts.wallet.add(priv);
             const from_addr = acct[0].address;
 
-            const receipt = await pack_contract.methods.add_version(status, dep_arr, cid_temp).send({from: from_addr});
+            const receipt = await pack_contract.methods.add_version(status, dep_arr, cid).send({from: from_addr});
+
             console.log('success');
             router.push('/update/success');
         } catch (error) {
@@ -127,8 +140,8 @@ export default function Home(){
                                 <p>Please input all files necessary for the package.</p>
                                 <br/>
                                 <input 
-                                    name="files"
-                                    id="files"
+                                    name="file"
+                                    id="file"
                                     type="file"
                                     multiple={true}
                                     required

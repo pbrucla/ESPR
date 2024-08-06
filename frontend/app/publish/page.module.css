@@ -76,3 +76,8 @@
 .errortext { 
     color: red;
 }
+
+.addresstext {
+    color: #ffba44;
+    font-weight: bold;
+}

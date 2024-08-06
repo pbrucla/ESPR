@@ -151,7 +151,7 @@ def packages_sample():
 
       # Create a contract instance for the Package contract
       package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
-      package_description = package_contract.functions.description().call()
+      package_description = package_contract.functions.get_description().call()
       package_name = package_contract.functions.get_name().call()
       package_versions = package_contract.functions.get_versions().call()
       packages.append({"name": package_name, "description" : package_description, "version_history" : package_versions, "package_address" : package_address})
@@ -217,28 +217,69 @@ def get_events():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route("/update_package", methods=['POST']) 
-def update_package(package_address, version_number, update_status, new_dependencies):
-    if not Web3.is_address(package_address):
-        abort(400)
+# @app.route("/update_package", methods=['POST']) 
+# def update_package(package_address, version_number, update_status, new_dependencies):
+#     if not Web3.is_address(package_address):
+#         abort(400)
 
-    # Create a contract instance
-    #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
+#     # Create a contract instance
+#     #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
-    '''
-    # ABI for the Package contract
-    package_abi = contracts["packageContract.sol"]["Package"]["abi"]
-    '''
+#     '''
+#     # ABI for the Package contract
+#     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
+#     '''
 
-    # Create a contract instance for the Package contract
-    package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
+#     # Create a contract instance for the Package contract
+#     package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
 
-    ipfs_hash = package_contract.functions.retrieve_package_hash(version_number).call()
+#     ipfs_hash = package_contract.functions.retrieve_package_hash(version_number).call()
+#     # Ensure a file is part of the request
+#     if 'file' not in request.files:
+#         return jsonify({"error": "No file part in the request"}), 400
+    
+#     file = request.files['file']
+    
+#     if file:
+#         try:
+#             url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
+#             headers = {
+#                 'pinata_api_key': API_KEY,
+#                 'pinata_secret_api_key': API_SECRET
+#             }
+#             files = {'file': file}
+#             response = requests.post(url, headers=headers, files=files)
+            
+#             if response.status_code == 200:
+#                 ipfs_hash = response.json()['IpfsHash'], 200
+#             else:
+#                 return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
+        
+#         except Exception as e:
+#             return jsonify({"error": str(e)}), 500
+        
+#     package_versions = package_contract.functions.get_versions().call()
+#     package_dependencies = {}
+#     for version in package_versions:
+#       package_dependencies[version] = package_contract.functions.get_dependencies(version).call()
+    
+#     package_dependencies.extend(new_dependencies)
+
+#     package_contract.functions.add_version(update_status, package_dependencies, ipfs_hash).call()
+
+@app.route("/upload_package", methods=['POST']) 
+@cross_origin()
+def upload_package():
+    global numpackages
     # Ensure a file is part of the request
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
     
     file = request.files['file']
+    
+    # Check if the file is empty
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
     
     if file:
         try:
@@ -251,25 +292,20 @@ def update_package(package_address, version_number, update_status, new_dependenc
             response = requests.post(url, headers=headers, files=files)
             
             if response.status_code == 200:
-                ipfs_hash = response.json()['IpfsHash'], 200
+                numpackages += 1
+                return response.json()['IpfsHash'], 200
             else:
                 return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
         
         except Exception as e:
             return jsonify({"error": str(e)}), 500
-        
-    package_versions = package_contract.functions.get_versions().call()
-    package_dependencies = {}
-    for version in package_versions:
-      package_dependencies[version] = package_contract.functions.get_dependencies(version).call()
-    
-    package_dependencies.extend(new_dependencies)
 
-    package_contract.functions.add_version(update_status, package_dependencies, ipfs_hash).call()
+    return jsonify({"error": "File upload failed"}), 500
 
-@app.route("/upload_package", methods=['POST']) 
+@app.route("/update_package", methods=['POST']) 
 @cross_origin()
-def upload_package():
+def update_package():
+    global numpackages
     # Ensure a file is part of the request
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
@@ -299,6 +335,7 @@ def upload_package():
             return jsonify({"error": str(e)}), 500
 
     return jsonify({"error": "File upload failed"}), 500
+
 
 @app.route("/retrieve_package", methods=['GET'])
 def retrieve_package(package_address, version_number):

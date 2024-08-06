@@ -13,12 +13,14 @@ export default function Home(){
     const [stinky, setStinky] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [uploading, setUploading] = React.useState(false);
+    const [depAddr, setDepAddr] = React.useState('');
     function UploadPack(){
         async function submitting(formData: FormData) {
             setUploading(true);
 
 
             const priv = formData.get("priv") as string;
+            formData.delete("priv");
             const name = formData.get('name');
             const desc = formData.get('description') as string;
             const raw_deps = formData.get('deps') as string;
@@ -29,7 +31,6 @@ export default function Home(){
                 const res = await fetch(`${back_url}/contract_address`);
                 const json = await res.json();
                 const addr = json['address'];
-                console.log(addr);
                 const pacman_contract = new web3.eth.Contract(contract_abi, addr);
                 const account = web3.eth.accounts.wallet.add(priv);
                 const from_addr = account[0].address;
@@ -44,7 +45,7 @@ export default function Home(){
 
                 const second_text = await second_res.text();
 
-                const deployed = await pacman_contract.methods.create_package(name, dep_arr, desc, second_text).call({from: from_addr}).then(function(result){console.log(result)});
+                const deployed = await pacman_contract.methods.create_package(name, dep_arr, desc, second_text).call({from: from_addr}).then(function(result){let temp = result + ''; setDepAddr(temp)});
                 const receipt = await pacman_contract.methods.create_package(name, dep_arr, desc, second_text).send({from: from_addr});
                 if(stinky) setStinky(false);
                 setSuccess(true);
@@ -146,7 +147,23 @@ export default function Home(){
             </div>
             </div>)}
             {publish && !success && (<UploadPack/>)}
-            {success && (<div className={styles.basictextcenter}><h1>Your Package Has Been Successfully Published!</h1><br/><p>Inspect the browser and check the console log for the address that the package is deployed to!</p></div>)}
+            {success && (
+                <div className={styles.basictextcenter}>
+                    <h1>
+                        Your Package Has Been Successfully Published!
+                    </h1>
+                    <br/>
+                    <p>
+                        Your package has been deployed to the following address: <span className={styles.addresstext}>
+                            {depAddr}
+                        </span>
+                    </p>
+                    <br/>
+                    <p>
+                        Please save this address as this is the identifier for your package.
+                    </p>
+                </div>
+            )}
         </main>
     )
 }
