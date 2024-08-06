@@ -146,8 +146,8 @@ def packages_sample():
   package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
   packages = []
-  for i in range(numpackages):
-      package_address = package_manager_contract.functions.packages(i).call()
+  raws = package_manager_contract.functions.get_packages().call()
+  for package_address in raws:
 
       # Create a contract instance for the Package contract
       package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
@@ -283,7 +283,6 @@ def get_events():
 @app.route("/upload_package", methods=['POST']) 
 @cross_origin()
 def upload_package():
-    global numpackages
     # Ensure a file is part of the request
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
@@ -305,7 +304,6 @@ def upload_package():
             response = requests.post(url, headers=headers, files=files)
             
             if response.status_code == 200:
-                numpackages += 1
                 return response.json()['IpfsHash'], 200
             else:
                 return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
@@ -318,7 +316,6 @@ def upload_package():
 @app.route("/update_package", methods=['POST']) 
 @cross_origin()
 def update_package():
-    global numpackages
     # Ensure a file is part of the request
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
@@ -340,7 +337,6 @@ def update_package():
             response = requests.post(url, headers=headers, files=files)
             
             if response.status_code == 200:
-                numpackages += 1
                 return response.json()['IpfsHash'], 200
             else:
                 return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
