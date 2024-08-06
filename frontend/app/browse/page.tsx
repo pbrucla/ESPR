@@ -99,7 +99,7 @@ export default function Browse(){
             setNoShow(false);
     }, [show])
 
-    const [loadingMsg, setLoadingMsg] = React.useState<string | null>("Loading Challenges...");
+    const [loadingMsg, setLoadingMsg] = React.useState<string | null>("Loading Packages...");
 
 
     const toRender = (
