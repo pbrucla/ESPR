@@ -186,7 +186,10 @@ def package_info(package_address):
     for version in package_versions:
       package_dependencies[version] = package_contract.functions.get_dependencies(version).call()
     package_collaborators = package_contract.functions.get_collaborators().call()
-    package_status = "alive"
+    package_status_bool = package_contract.functions.get_enabled().call()
+
+
+    package_status = "alive" if package_status_bool else "dead"
 
     info = {
       "name": package_name,
@@ -312,40 +315,6 @@ def upload_package():
             return jsonify({"error": str(e)}), 500
 
     return jsonify({"error": "File upload failed"}), 500
-
-@app.route("/update_package", methods=['POST']) 
-@cross_origin()
-def update_package():
-    # Ensure a file is part of the request
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part in the request"}), 400
-    
-    file = request.files['file']
-    
-    # Check if the file is empty
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
-    
-    if file:
-        try:
-            url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
-            headers = {
-                'pinata_api_key': API_KEY,
-                'pinata_secret_api_key': API_SECRET
-            }
-            files = {'file': file}
-            response = requests.post(url, headers=headers, files=files)
-            
-            if response.status_code == 200:
-                return response.json()['IpfsHash'], 200
-            else:
-                return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
-        
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-
-    return jsonify({"error": "File upload failed"}), 500
-
 
 @app.route("/retrieve_package", methods=['GET'])
 def retrieve_package(package_address, version_number):

@@ -27,7 +27,7 @@ export default function Home(){
             const dep_arr = raw_deps.split(',');
 
             const res = await fetch(
-                `${back_url}/update_package`,
+                `${back_url}/upload_package`,
                 {
                     method: 'POST',
                     body: formData
