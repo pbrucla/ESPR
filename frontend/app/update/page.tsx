@@ -16,10 +16,6 @@ export default function Home(){
     const [updateVersion, setUpdateVersion] = React.useState(true);
     const [addCollab, setAddCollab] = React.useState(false);
     const [disable, setDisable] = React.useState(false);
-    async function submitting(formData: FormData) {
-        const status = formData.get("update-type");
-        console.log(status);
-    }
 
     async function submitVersion(formData: FormData){
         try {
@@ -40,7 +36,6 @@ export default function Home(){
 
             const cid = await res.text();
 
-            // const cid_temp = "Qmf1rtki74jvYmGeqaaV51hzeiaa6DyWc98fzDiuPatzyy";
 
             const pack_contract = new web3.eth.Contract(package_abi, addr);
             const acct = web3.eth.accounts.wallet.add(priv);
@@ -48,7 +43,6 @@ export default function Home(){
 
             const receipt = await pack_contract.methods.add_version(status, dep_arr, cid).send({from: from_addr});
 
-            console.log('success');
             router.push('/update/success');
         } catch (error) {
             if (error instanceof Error){
@@ -70,7 +64,6 @@ export default function Home(){
             const from_addr = acct[0].address;
 
             const receipt = await pack_contract.methods.add_collaborator(redguy).send({from: from_addr});
-            console.log('success');
             router.push('/update/success');
         } catch (error) {
             if (error instanceof Error){
@@ -220,11 +213,10 @@ export default function Home(){
             const from_addr = acct[0].address;
 
             const receipt = await pack_contract.methods.disable().send({from: from_addr});
-            console.log('success');
             router.push('/update/success');
         } catch (error) {
             if (error instanceof Error){
-                console.log(error.message);
+                console.error(error.message);
             }
             return;
         }
