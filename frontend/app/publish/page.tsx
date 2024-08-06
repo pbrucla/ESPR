@@ -140,7 +140,7 @@ export default function Home(){
                     <li>Version should be of the form x.y.z, for nonnegative integer x,y,z</li>
                     <li>Provide your private key; this is not stored in any way, nor is it sent over the web</li>
                     <li>Select the relevant files for your package</li>
-                    <li>You're good to go!</li>
+                    <li>You&#39;re good to go!</li>
                 </ul>
                 <br/>
                 <button className={styles.submitbutton} onClick={() => {setPublish(!publish)}}>Get Started!</button>

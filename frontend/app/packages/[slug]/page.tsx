@@ -16,6 +16,7 @@ type Package = {
   dependencies: Dependencies;
   collaborators: string[];
   status: string;
+  description: string;
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
@@ -28,7 +29,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   React.useEffect(() => {
     const getPack = async () => {
         try {
-            const response = await fetch(`${back_url}/package_info_sample/${id}`);
+            const response = await fetch(`${back_url}/package_info/${id}`);
             if (!response.ok){
                 throw new Error(`Response status: ${response.status}`);
             }
@@ -89,8 +90,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const collabs = pack?.collaborators.join(', ');
 
-
-
   const packInfo = (
     <main>
         <div style={{padding: "0 5rem"}}>
@@ -101,15 +100,22 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div style={{position: "relative", width: "70vw"}}>
                 <br></br>
                 <div style={{overflowWrap: "break-word", fontSize: "30px"}}>
-                        <b>AUTHOR:</b> {pack?.author}
+                  <b>AUTHOR:</b> {pack?.author}
                 </div>
                 <br></br>
                 <div style={{overflowWrap: "break-word"}}>
-                        <b style={{fontSize: "25px"}}>Collaborators:</b>  <p style={{fontSize: "15px"}}> {collabs} </p>
+                  <b style={{fontSize: "25px"}}>Collaborators:</b>  <p style={{fontSize: "15px"}}> {collabs} </p>
                 </div>
                 <br></br>
                 <div style={{overflowWrap: "break-word", fontSize: "35px"}}>
-                        <b>STATUS: <span style={pack?.status === "alive" ? {color: "green"} : {color: "red"}}>{pack?.status}</span></b>
+                  <b>STATUS: <span style={pack?.status === "alive" ? {color: "green"} : {color: "red"}}>{pack?.status}</span></b>
+                </div>
+                <br></br>
+                <div style={{overflowWrap: "break-word", fontSize: "30px"}}>
+                  <b>Description:</b>
+                </div>
+                <div style={{overflowWrap: "break-word", fontSize: "20px"}}>
+                  <p>{pack?.description}</p>
                 </div>
             </div>
             <div style={{overflowWrap: "break-word"}}>

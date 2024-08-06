@@ -152,6 +152,7 @@ def packages_sample():
       # Create a contract instance for the Package contract
       package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
       package_description = package_contract.functions.get_description().call()
+      package_description = package_contract.functions.get_description().call()
       package_name = package_contract.functions.get_name().call()
       package_versions = package_contract.functions.get_versions().call()
       packages.append({"name": package_name, "description" : package_description, "version_history" : package_versions, "package_address" : package_address})
@@ -221,7 +222,13 @@ def get_events():
 # def update_package(package_address, version_number, update_status, new_dependencies):
 #     if not Web3.is_address(package_address):
 #         abort(400)
+# @app.route("/update_package", methods=['POST']) 
+# def update_package(package_address, version_number, update_status, new_dependencies):
+#     if not Web3.is_address(package_address):
+#         abort(400)
 
+#     # Create a contract instance
+#     #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 #     # Create a contract instance
 #     #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
 
@@ -229,7 +236,13 @@ def get_events():
 #     # ABI for the Package contract
 #     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
 #     '''
+#     '''
+#     # ABI for the Package contract
+#     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
+#     '''
 
+#     # Create a contract instance for the Package contract
+#     package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
 #     # Create a contract instance for the Package contract
 #     package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
 
@@ -327,6 +340,7 @@ def update_package():
             response = requests.post(url, headers=headers, files=files)
             
             if response.status_code == 200:
+                numpackages += 1
                 return response.json()['IpfsHash'], 200
             else:
                 return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
