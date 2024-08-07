@@ -265,6 +265,8 @@
 .topnav {
   background-color: #000;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 
@@ -277,12 +279,11 @@
   text-decoration: none;
   font-size: 17px;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #ff8c4c;
+  background-color: #F44D8A;
   color: black;
 }
 
@@ -365,3 +366,65 @@
 .errortext {
   color: red;
 }
+
+
+.topnavbrand {
+  background: linear-gradient(to right, #f5b100, #ffe040);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color: transparent;
+}
+
+.titleparent {
+  display: flex;
+  padding: 2.5vw;
+  width: 95vw;
+  border-style: solid;
+  border-color: #ffba44;
+  border-radius: 5px;
+  margin-top: 20px
+}
+
+.namedisplay {
+  width: 47.5%;
+  float: left;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  padding: 5vw;
+  text-align: center;
+  /* border-style: solid;
+  border-color: #ffba44;
+  border-radius: 5px; */
+}
+
+.homepagetext {
+  width: 47.5%;
+  float: right;
+  display: flex;
+  align-items: center;
+  flex-direction:column;
+  padding: 20px;
+  /* border-style: solid;
+  border-color: #ffba44;
+  border-radius: 5px; */
+}
+
+.big {
+  font-size: 3em;
+}
+
+.navbutton {
+  padding: 1.5vw;
+  background-color: #ffba44;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 150px;
+  width: 80%;
+}
+
+.navbutton:hover {
+  background-color: #F44D8A;
+}
+

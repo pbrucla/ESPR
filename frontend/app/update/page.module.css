@@ -7,11 +7,12 @@
     cursor: pointer; /* Pointer/hand icon */
     float: left; /* Float the buttons side by side */
     margin: auto;
-    width: 33%;
+    width: 34%;
   }
   
   .buttongroup button:not(:last-child) {
     border-right: none; /* Prevent double borders */
+    width: 33%
   }
   
   /* Clear floats (clearfix hack) */

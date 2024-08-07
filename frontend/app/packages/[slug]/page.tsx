@@ -23,7 +23,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const id = params.slug;
 
   const [pack, setPack] = React.useState<Package | null>();
-  const [msg, setMsg] = React.useState<string | null>("Loading Challenges...");
+  const [msg, setMsg] = React.useState<string | null>("Loading Packages...");
 
   
   React.useEffect(() => {
@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     );
   }
 
-  if (msg === "Loading Challenges...") {
+  if (msg === "Loading Packages...") {
     return (
       <main>
         <div className={styles.title}>

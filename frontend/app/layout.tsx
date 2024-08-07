@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className={styles.topnav}>
-          <a href='/'>Working Title</a>
+          <a href='/'><h2 className={styles.topnavbrand}>ESPR ✨</h2></a>
           <a href='/browse'>Browse</a>
           <a href='/publish'>Publish</a>
           <a href='/update'>Update</a>
