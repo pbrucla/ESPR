@@ -371,6 +371,7 @@
 .topnavbrand {
   background: linear-gradient(to right, #f5b100, #ffe040);
   -webkit-background-clip:text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -380,8 +381,8 @@
   width: 95vw;
   border-style: solid;
   border-color: #ffba44;
-  border-radius: 5px;
-  margin-top: 20px
+  border-radius: 20px;
+  margin-top: 30px
 }
 
 .namedisplay {
