@@ -11,7 +11,7 @@ export default function Home() {
         <div className={styles.homepagetext}>
           <h2 style={{margin: '20px', color: '#F44D8A', fontSize: '2.25em'}}>The Package Manager, Re-imagined</h2>
           <br />
-          <p style={{fontSize: '1.5em'}}>ESPR, or the Ethereum-Source Package Repository, is an innovative new take on the traditional package manager aiming to address common security concerns. Packages on ESPR have their information stored on the Ethereum blockchain, while the files are stored in an IPFS distributed filesystem. ESPR doesn't require any accounts, just an Ethereum wallet.</p>
+          <p style={{fontSize: '1.5em'}}>ESPR, or the Ethereum-Sourced Package Registry, is an innovative new take on the traditional package manager aiming to address common security concerns. Packages on ESPR have their information stored on the Ethereum blockchain, while the files are stored in an IPFS distributed filesystem. ESPR doesn't require any accounts, just an Ethereum wallet.</p>
         </div>
       </div>
       <div className={styles.titleparent} style={{padding: '1vw', border: 'none', margin: 'auto'}}>
