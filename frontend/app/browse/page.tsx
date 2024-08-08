@@ -104,7 +104,7 @@ export default function Browse(){
 
     const toRender = (
         show.map(({data, display}) => 
-            <div key={data.name}>
+            <div key={data.name} className={styles.card}>
                 {
                 display ? (
                     <div className={styles.packitem}>

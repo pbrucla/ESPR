@@ -39,15 +39,8 @@
     width: 25%;
     height: 100%;
 }
-.cards {
-    display: inline-flex;
-    float: right;
-}
-.cards.full {
-    width: 100%;
-}
-.cards.contract {
-    width: 75%;
+.card {
+    margin-right: 10px;
 }
 
 /* SIDEBAR FORMAT */
@@ -74,16 +67,6 @@
 }
 .hide {
     display: none;
-}
-
-.dot {
-    height: 0.8rem;
-    width: 0.8rem;
-    margin-left: 0rem;
-    margin-right: 0.8rem;
-
-    border-radius: 50%;
-    display: inline-block;
 }
 
 .search {
