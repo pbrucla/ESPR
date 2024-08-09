@@ -50,7 +50,7 @@ poetry install
 ```
 
 3\. Set up keys and IPFS
-Pinata is the IPFS solution used for file storage in this project. A quickstart guide can be found here [Pinata Quickstart](https://docs.pinata.cloud/quickstart). A freemium account with up to 1 GB of storage is available for new users to Pinata. 
+Pinata is the IPFS solution used for file storage in this project. A quickstart guide can be found at [Pinata Quickstart](https://docs.pinata.cloud/quickstart). A freemium account with up to 1 GB of storage is available for new users to Pinata. 
 
 This project requires several keys/other information from Pinata and the currently running blockchain:
 
