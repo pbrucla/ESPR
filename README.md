@@ -60,7 +60,7 @@ This project requires several keys/other information from Pinata and the current
 
 3. Obtain a private key from the shell currently running Anvil (refer to [Blockchain](#blockchain))
 
-4. Create a file named `.env.local` as following. It should contain the keys found from the previous steps.
+4. Create a file named `.env` as following. It should contain the keys found from the previous steps.
 
 ```
 PRIVATE_KEY="Anvil private key"
