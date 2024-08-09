@@ -13,7 +13,7 @@ Setting up ESPR requires 3 major steps: running Anvil, running the backend, and 
 cd ESPR
 ```
 Perform each section's setup (blockchain, backend, frontend) from this directory.
-### Blockchain Setup
+### Blockchain
 1\. If not yet installed, install [Foundry](https://book.getfoundry.sh/getting-started/installation)
 
 2\. Install the OpenZeppelin Dependency:
