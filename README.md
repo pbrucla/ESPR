@@ -8,7 +8,7 @@ Components of ESPR:
 - Smart contracts written in Solidity that run on the Ethereum blockchain
 ## Setup
 
-Setting up ESPR requires 3 major steps: running Anvil, running the backend, and starting up the frontend. Clone the repo with ``git clone``, then
+Setting up ESPR requires 3 major steps: running the blockchain with Anvil, running the backend, and starting up the frontend. These steps should be done in order. Clone the repo with ``git clone``, then
 ```sh
 cd ESPR
 ```
