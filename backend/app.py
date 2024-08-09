@@ -10,7 +10,9 @@ import os
 # install_solc('v0.8.2')
 # set_solc_version('v0.8.2')
 from flask_cors import CORS, cross_origin
-import flask
+
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -19,18 +21,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # Connect to local Ethereum node
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
 print(w3.is_connected())
-
-# Private key should be a string
-def load_env(file_path):
-    with open(file_path) as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#'):
-                key, value = line.split('=', 1)
-                os.environ[key] = value
-
-# Load environment variables from .env.local
-load_env('.env.local')
 
 # Access environment variables
 private_key = os.getenv('PRIVATE_KEY')

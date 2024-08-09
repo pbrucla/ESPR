@@ -8,7 +8,7 @@ Components of ESPR:
 - Smart contracts written in Solidity that run on the Ethereum blockchain
 ## Setup
 
-Setting up ESPR requires 4 major steps: running the blockchain with Anvil, running the backend, running the frontend, and setting up the .env file as well as the IPFS pinning service (through Pinata in our implementation). These steps should be done in order. Clone the repo with ``git clone``, then
+Setting up ESPR requires 3 major steps: running the blockchain with Anvil, running the backend, running the frontend. These steps should be done in order. Clone the repo with `git clone`, then
 ```sh
 cd ESPR
 ```
@@ -29,7 +29,9 @@ anvil
 ```
 If this command fails, check your ``$PATH`` environment variable to make sure it contains the path to your Foundry installation. Try ``source $HOME/.bashrc`` if it isn't present.
 
+
 ### Backend
+
 1\. Install [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 
 Linux/MacOS:
@@ -46,7 +48,29 @@ Windows:
 cd backend
 poetry install
 ```
-3\. Run the backend:
+
+3\. Set up keys and IPFS
+Pinata is the IPFS solution used for file storage in this project. A quickstart guide can be found here [Pinata Quickstart](https://docs.pinata.cloud/quickstart). A freemium account with up to 1 GB of storage is available for new users to Pinata. 
+
+This project requires several keys/other information from Pinata and the currently running blockchain:
+
+1. Generate a key with admin scope [here](https://app.pinata.cloud/developers/api-keys). Take note of the API key and API secret keys provided. 
+
+2. Set up or retrieve the gateway domain [here](https://app.pinata.cloud/gateway). Take note of this url. 
+
+3. Obtain a private key from the shell currently running Anvil (refer to [Blockchain](#blockchain))
+
+4. Create a file named `.env.local` as following. It should contain the keys found from the previous steps.
+
+```
+PRIVATE_KEY="Anvil private key"
+
+API_KEY="your generated Pinata API key here"
+API_SECRET="your generated Pinata API secret key here"
+PINATA_GATEWAY="Pinata gateway url"
+```
+
+4\. Run the backend:
 ```sh
 poetry run flask run
 ```
@@ -71,22 +95,6 @@ pnpm i
 4\. Run the frontend:
 ```sh
 pnpm dev
-```
-
-### .env and Pinata IPFS Pinning Setup 
-A quickstart guide can be found here [Pinata Quickstart](https://docs.pinata.cloud/quickstart). A freemium account with up to 1 GB of storage is available for new users to Pinata. 
-1\. Generate a key with admin scope [here](https://app.pinata.cloud/developers/api-keys). Take note of the API key and API secret keys provided. 
-
-2\. Set up or retrieve the gateway domain [here](https://app.pinata.cloud/gateway). Take note of this url. 
-
-3\. Obtain a private key from the shell currently running Anvil (refer to the Blockchain section)
-
-4\. Create a .env.local file with the contents obtained from above. It should look like the following:
-```
-PRIVATE_KEY = "Anvil private key"
-API_KEY = 'your generated Pinata API key here'
-API_SECRET = 'your generated Pinata API secret key here'
-PINATA_GATEWAY = 'Pinata gateway url'
 ```
 
 ## Acknowledgements
