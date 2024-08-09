@@ -21,13 +21,25 @@ w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
 print(w3.is_connected())
 
 # Private key should be a string
-private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-account_0 = w3.eth.account.from_key(private_key)
+def load_env(file_path):
+    with open(file_path) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                key, value = line.split('=', 1)
+                os.environ[key] = value
 
-#pinata key, secret, gateway
-API_KEY = '0d05b7cab1ee59de6fda'
-API_SECRET = 'cc968d1e046e0b3dd16620cd79d3f2e8b2922b5a4b7803afaa79ca6f37b140f3'
-PINATA_GATEWAY = 'https://orange-quiet-porpoise-260.mypinata.cloud/ipfs/'
+# Load environment variables from .env.local
+load_env('.env.local')
+
+# Access environment variables
+private_key = os.getenv('PRIVATE_KEY')
+API_KEY = os.getenv('API_KEY')
+API_SECRET = os.getenv('API_SECRET')
+PINATA_GATEWAY = os.getenv('PINATA_GATEWAY')
+
+
+account_0 = w3.eth.account.from_key(private_key)
 
 '''
 # Define file path and compile the contract
@@ -221,68 +233,6 @@ def get_events():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# @app.route("/update_package", methods=['POST']) 
-# def update_package(package_address, version_number, update_status, new_dependencies):
-#     if not Web3.is_address(package_address):
-#         abort(400)
-# @app.route("/update_package", methods=['POST']) 
-# def update_package(package_address, version_number, update_status, new_dependencies):
-#     if not Web3.is_address(package_address):
-#         abort(400)
-
-#     # Create a contract instance
-#     #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
-#     # Create a contract instance
-#     #package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
-
-#     '''
-#     # ABI for the Package contract
-#     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
-#     '''
-#     '''
-#     # ABI for the Package contract
-#     package_abi = contracts["packageContract.sol"]["Package"]["abi"]
-#     '''
-
-#     # Create a contract instance for the Package contract
-#     package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
-#     # Create a contract instance for the Package contract
-#     package_contract = w3.eth.contract(address=package_address, abi=package_instance_abi)
-
-#     ipfs_hash = package_contract.functions.retrieve_package_hash(version_number).call()
-#     # Ensure a file is part of the request
-#     if 'file' not in request.files:
-#         return jsonify({"error": "No file part in the request"}), 400
-    
-#     file = request.files['file']
-    
-#     if file:
-#         try:
-#             url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
-#             headers = {
-#                 'pinata_api_key': API_KEY,
-#                 'pinata_secret_api_key': API_SECRET
-#             }
-#             files = {'file': file}
-#             response = requests.post(url, headers=headers, files=files)
-            
-#             if response.status_code == 200:
-#                 ipfs_hash = response.json()['IpfsHash'], 200
-#             else:
-#                 return jsonify({"error": response.json().get('error', 'Failed to upload file')}), response.status_code
-        
-#         except Exception as e:
-#             return jsonify({"error": str(e)}), 500
-        
-#     package_versions = package_contract.functions.get_versions().call()
-#     package_dependencies = {}
-#     for version in package_versions:
-#       package_dependencies[version] = package_contract.functions.get_dependencies(version).call()
-    
-#     package_dependencies.extend(new_dependencies)
-
-#     package_contract.functions.add_version(update_status, package_dependencies, ipfs_hash).call()
-
 @app.route("/upload_package", methods=['POST']) 
 @cross_origin()
 def upload_package():
@@ -361,48 +311,6 @@ def retrieve_package(package_address, version_number):
         # Include the exact error message in the response for debugging
         return jsonify({"error": f"Exception occurred: {str(e)}"}), 500
 
-# function retrieve_package_hash(string calldata version_number) public view returns (string memory) {
-#         return cid_hashMap[version_number];
-#     }
-
-# @app.route("/publish_package", methods=['POST'])
-# def publish_package():
-#     packageName = request.form['package_name']
-#     dependencies = request.form.getlist('dependencies')
-#     description = request.form['description']
-#     #cidhash = request.form['cid']
-#     cidhash = "temp"
-#     # Create a contract instance
-#     package_manager_contract = w3.eth.contract(address=deployed_addr, abi=package_manager_abi)
-
-#     # Build the transaction
-#     unsent_tx = package_manager_contract.functions.create_package(packageName, dependencies, description, cidhash).build_transaction({
-#         "from": account_0.address,
-#         "nonce": w3.eth.get_transaction_count(account_0.address),
-#     })
-
-#     # Sign the transaction
-#     signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key=private_key)
-
-#     # Send the transaction
-#     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-#     print(f"Transaction sent with hash: {tx_hash.hex()}")
-
-#     # Wait for the transaction receipt with a longer timeout
-#     try:
-#         receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
-#         print(f"Transaction mined in block {receipt['blockNumber']}")
-#         package_address = package_manager_contract.functions.packages(numpackages).call()
-#         numpackages += 1
-#     except Exception as e:
-#         print(f"Error waiting for transaction receipt: {str(e)}")
-#         message = "Error waiting for transaction receipt."
-
-#     # Check if the transaction was successful
-#     if receipt.status != 1:
-#         message = "Transaction failed"
-#     else:
-#         message = f"Package successfully created. Go to /package_info/{package_address} to view the created contract."
 
 if __name__ == "__main__":
     app.run(debug=True)
