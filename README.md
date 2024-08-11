@@ -1,5 +1,5 @@
 # ESPR: Ethereum-Sourced Package Registry
-####  _by Joshua Zhu, Arnav Vora, Ryan Chang, Alexander Edwards, Eddie He, Andy Huang, Sanjay Krishna, Layah Vigneaud, Arnav Vora, Alan Wu, Kevin Zhao_
+####  _by Joshua Zhu, Arnav Vora, Ryan Chang, Alexander Edwards, Eddie He, Andy Huang, Sanjay Krishna, Layah Vigneaud, Alan Wu, Kevin Zhao_
 **A package manager based on the Ethereum blockchain to address software supply chain security concerns.**
 
 Components of ESPR:
