@@ -155,7 +155,7 @@ export default function Home(){
                     <br/>
                     <p>
                         Your package has been deployed to the following address: <span className={styles.addresstext}>
-                            {depAddr}
+                            <a href={"/packages/" + depAddr}>{depAddr}</a>
                         </span>
                     </p>
                     <br/>

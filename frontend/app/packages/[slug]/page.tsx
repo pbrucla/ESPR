@@ -20,7 +20,7 @@ type Package = {
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const id = params.slug;
+  const id: string = params.slug;
 
   const [pack, setPack] = React.useState<Package | null>();
   const [msg, setMsg] = React.useState<string | null>("Loading Packages...");
@@ -47,6 +47,28 @@ export default function Page({ params }: { params: { slug: string } }) {
     getPack();
   },[id]);
 
+  
+  function downloadPack(address: string, version: string) {
+    const url = `${back_url}/retrieve_package?package_address=${encodeURIComponent(address)}&version_number=${encodeURIComponent(version)}`;
+    
+    fetch(url).then((response) => {
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      return response.blob();
+    }).then((blob) => {
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+    }).catch((err) => {
+      console.error("There was a problem with downloading:", err.message);
+    })
+  }
+
+
 
   if (pack === null) {
     return (
@@ -72,16 +94,22 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const versionHistory = (
     <div style={{lineHeight: "2.5"}}>
+      <br></br>
       {pack?.versions.map((version: string) => (
-        <div key={version} className={styles.hoverContainer}>
+        <div key={version} style={{display: "flex"}}>
           <br></br>
-          <p className={styles.hoverText}>{version}</p>
-          <div className={styles.hoverMenu} style={version === earliestVersion ? {transform: "translateY(-100%)"} : {}}>
-            {pack?.dependencies[version].map( (dep: string) =>
-            // could link to package
-              <a href="#" key={dep}>{dep}</a>
-            )}
+          <div className={styles.hoverContainer}>
+            <p className={styles.hoverText}>{version}</p>
+            <div className={styles.hoverMenu} style={version === earliestVersion ? {transform: "translateY(-100%)"} : {}}>
+              {pack?.dependencies[version].map( (dep: string) =>
+              // could link to package
+                <a key={dep}>{dep}</a>
+              )}
+            </div>
           </div>
+          <span style={{float: "right", padding: "10px"}}>
+                    <button className={styles.downloadButton} onClick = {() => downloadPack(id,version)}>Download</button>
+          </span>
         </div>
       )).reverse()}
       <br></br>
@@ -119,7 +147,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </div>
             </div>
             <div style={{overflowWrap: "break-word"}}>
-              <b style={{fontSize: "25px"}}>Version History</b>
+              <b style={{fontSize: "25px", marginRight: "5vw"}}>Version History</b>
               {versionHistory}
             </div>
           </div>

@@ -257,7 +257,10 @@ def upload_package():
     return jsonify({"error": "File upload failed"}), 500
 
 @app.route("/retrieve_package", methods=['GET'])
-def retrieve_package(package_address, version_number):
+def retrieve_package():
+    package_address = request.args.get('package_address')
+    version_number = request.args.get('version_number')
+
     if not Web3.is_address(package_address):
         abort(400)
 
