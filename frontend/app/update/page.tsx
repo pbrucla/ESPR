@@ -83,7 +83,7 @@ export default function Home(){
                         <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
-                                <p>Prefix with '0x'</p>
+                                <p>Prefix with &apos;0x&apos;</p>
                                 <input
                                     className={publishstyles.publishtextinput}
                                     name="address"
@@ -161,7 +161,7 @@ export default function Home(){
                         <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
-                                <p>Prefix with '0x'</p>
+                                <p>Prefix with &apos;0x&apos;</p>
                                 <input
                                     className={publishstyles.publishtextinput}
                                     name="address"
@@ -232,7 +232,7 @@ export default function Home(){
                         <div className={publishstyles.basictextcenter}>
                             <div>
                                 <h2>Package Address</h2>
-                                <p>Prefix with '0x'</p>
+                                <p>Prefix with &apos;0x&apos;</p>
                                 <input
                                     className={publishstyles.publishtextinput}
                                     name="address"
