@@ -1,5 +1,6 @@
 'use client'
 
+import fileDownload from "js-file-download";
 import styles from "./page.module.css";
 import React from 'react';
 
@@ -48,7 +49,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   },[id]);
 
   
-  function downloadPack(address: string, version: string) {
+  function downloadPack(package_name: string, address: string, version: string) {
     const url = `${back_url}/retrieve_package?package_address=${encodeURIComponent(address)}&version_number=${encodeURIComponent(version)}`;
     
     fetch(url).then((response) => {
@@ -57,12 +58,8 @@ export default function Page({ params }: { params: { slug: string } }) {
       }
       return response.blob();
     }).then((blob) => {
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(downloadUrl);
+      const filename = package_name;
+      fileDownload(blob, filename);
     }).catch((err) => {
       console.error("There was a problem with downloading:", err.message);
     })
@@ -108,7 +105,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             </div>
           </div>
           <span style={{float: "right", padding: "10px"}}>
-                    <button className={styles.downloadButton} onClick = {() => downloadPack(id,version)}>Download</button>
+            <button className={styles.downloadButton} onClick = {() => downloadPack(pack?.name,id,version)}>Download</button>
           </span>
         </div>
       )).reverse()}
