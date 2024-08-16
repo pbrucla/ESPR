@@ -131,7 +131,7 @@ export default function Browse(){
                 </div>
                 <div style={{width: "100%", height: "100vw", display: "flex"}}>
 
-                    <div className={open ? styles.sideOpen : styles.sideClose}>
+                    <div className={open ? styles.sideOpen : styles.sideClose} style={{marginRight: '50px'}}>
                         <button onClick={toggle} className={open ? styles.hide : `${styles.filterbtn} ${styles.close}`}>
                             <FilterBtn />
                         </button>
