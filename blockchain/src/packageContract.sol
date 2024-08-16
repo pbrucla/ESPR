@@ -145,6 +145,10 @@ contract Package {
         return dependencyMap[version_number];
     }
 
+    function retrieve_package_hash(string calldata version_number) public view returns (string memory) {
+        return cid_hashMap[version_number];
+    }
+
     function remove_collaborator(address removed_collab) public only_author enabled {
         uint length = collaborators.length; 
         for (uint256 i = 0; i < length; i++) {
