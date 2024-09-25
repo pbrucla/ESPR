@@ -116,7 +116,7 @@ export default function Home(){
                             <br/>
                             <div>
                                 <h2>Update Dependencies </h2>
-                                <p>Enter comma-separated list of the addresses of ALL dependencies</p>
+                                <p>Enter comma-separated list of ALL dependencies</p>
                                 {
                                     //consider changing this to a textarea field instead since addresses are kinda long
                                 }
